@@ -97,3 +97,7 @@ A separate agent received only `specs/spec.md`, the AGENTS.md conventions and th
 - `weather/city_store.py` (TinyDB), `GET/POST /api/cities`, `DELETE /api/cities/{name}`, Cities page + nav, compose volume. `resolve_cities` now takes the catalog explicitly; the pipeline passes the saved list. D16.
 - Tests: 99 passed (20 new: store, API contract codes 201/204/404/409/422/502, page). Pyright 0 errors.
 - Docker compose + browser: Lisbon added by name (201) and persisted across `restart`; `paris` and `TOKYO` → 409; half-filled coordinates rejected in the form; Nairobi geocoded and added; Lisbon removed (204). Volume writable as `app`.
+
+## T15: README (Implementer)
+- Done last on purpose (it depends only on T14), so it describes the finished project: quick start (uv and Docker), outputs, CSV and API guide, managing cities, layout, the approach (spec-driven, task harness, multi-agent roles, independent review) and suggestions (Scrapy vs requests, async, history, Redis/SQLite, Playwright).
+- Final state: 18 tasks done (T00–T17), 13 features done, 99 tests, pyright 0 errors, 16 decisions. Every task merged through its own PR with CI green.
