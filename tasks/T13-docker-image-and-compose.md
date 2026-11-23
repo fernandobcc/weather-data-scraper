@@ -1,7 +1,7 @@
 ---
 id: T13
 title: Docker image and compose
-status: todo
+status: in_progress
 requirements: R15
 depends_on: T11
 ---

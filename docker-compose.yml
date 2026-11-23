@@ -1,0 +1,21 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # One-shot CLI run that writes weather_data.csv + charts to ./output
+  cli:
+    build: .
+    command: ["python", "main.py"]
+    volumes:
+      - ./output:/app/output
+    profiles: ["cli"]
