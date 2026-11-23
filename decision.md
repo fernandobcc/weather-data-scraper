@@ -47,3 +47,7 @@ the task that made it.
 - **Context:** One dashboard load hits several endpoints (data, rankings, a chart) for the same cities.
 - **Decision:** Cache pipeline results for 5 min (Open-Meteo "current" data refreshes every 15 min), keyed by the *set* of city names (order and case don't matter), capped at 128 entries. A lock makes concurrent cache misses share one upstream call.
 - **Consequence:** One upstream call per page load. The cache is per-process; use Redis if the API scales out.
+
+## D11: Two chart paths, no frontend build step (T11)
+- **Decision:** matplotlib PNGs (the bonus, served by `/api/charts/{metric}.png`) **and** a Chart.js dashboard for interactivity (tooltips, °F/mph toggle, metric switch). Plain HTML/JS/CSS, with Chart.js from a CDN.
+- **Consequence:** The bonus is met literally and the UI is better; no Node toolchain. The dashboard needs internet access for the CDN (noted as a suggestion).
