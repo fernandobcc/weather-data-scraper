@@ -1,7 +1,7 @@
 ---
 id: T04
 title: Geocode city names outside the default list
-status: todo
+status: done
 requirements: R3, R8
 depends_on: T03
 ---
@@ -13,10 +13,10 @@ Any city name works: names that aren't in the default list get coordinates from 
 - `weather/geocoding.py`
 
 ## Definition of done
-- [ ] Default-list coordinates win; other names are geocoded
-- [ ] Unresolvable names are skipped with a warning
-- [ ] A geocoding outage skips only that name
-- [ ] Duplicates (same name and coordinates) are dropped
+- [x] Default-list coordinates win; other names are geocoded
+- [x] Unresolvable names are skipped with a warning
+- [x] A geocoding outage skips only that name
+- [x] Duplicates (same name and coordinates) are dropped
 
 ## Verify
 ```bash
@@ -27,4 +27,5 @@ uv run pytest -q tests/test_geocoding.py
 - Resolve `Lisbon` and a nonsense name against the live API.
 
 ## Evidence
-- _Pending._
+- 2026-11-23 · `tests/test_geocoding.py` 4 cases pass; pyright 0 errors.
+- Manual: live resolve of Lisbon / Qwxzzyville / tokyo gave Lisbon geocoded, the nonsense name skipped, Tokyo from the list.

@@ -45,6 +45,13 @@ def forecast_handler(params):
     return FakeResponse(locations if len(locations) > 1 else locations[0])
 
 
+def geocoding_handler(params):
+    """Knows only Lisbon."""
+    if params["name"].lower() == "lisbon":
+        return FakeResponse({"results": [{"name": "Lisbon", "latitude": 38.72, "longitude": -9.14}]})
+    return FakeResponse({})
+
+
 @pytest.fixture
 def fake_session():
-    return FakeSession({"forecast": forecast_handler})
+    return FakeSession({"forecast": forecast_handler, "geocoding": geocoding_handler})
