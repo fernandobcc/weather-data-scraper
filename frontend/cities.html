@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cities · Weather Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="viz-root">
+  <nav class="nav"><a href="/">Dashboard</a><a href="/cities" aria-current="page">Cities</a></nav>
+  <header>
+    <h1>Cities</h1>
+    <p class="muted">The saved list the dashboard and CLI use by default.</p>
+  </header>
+
+  <section class="card">
+    <h2>Add a city</h2>
+    <form id="add-form" class="add-form">
+      <label>Name <input id="name" required maxlength="100" placeholder="Lisbon"></label>
+      <label>Latitude <input id="lat" type="number" step="any" min="-90" max="90" placeholder="optional"></label>
+      <label>Longitude <input id="lon" type="number" step="any" min="-180" max="180" placeholder="optional"></label>
+      <button type="submit">Add</button>
+    </form>
+    <p class="hint">Leave the coordinates empty to look them up automatically. Up to 25 cities.</p>
+    <p id="status" role="status"></p>
+  </section>
+
+  <section class="card">
+    <h2 id="count">Saved cities</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>City</th><th>Latitude</th><th>Longitude</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script src="/static/cities.js"></script>
+</body>
+</html>

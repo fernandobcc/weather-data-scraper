@@ -25,3 +25,14 @@ def test_dashboard_escapes_and_reports_errors():
 def test_cdn_script_has_subresource_integrity():
     html = client.get("/").text
     assert 'integrity="sha384-' in html and 'crossorigin="anonymous"' in html
+
+
+def test_cities_page_and_navigation():
+    page = client.get("/cities").text
+    assert "Add a city" in page and "/static/cities.js" in page
+    assert 'href="/cities"' in client.get("/").text and 'href="/"' in page
+
+
+def test_cities_page_builds_rows_without_innerhtml():
+    js = client.get("/static/cities.js").text
+    assert "textContent" in js and "innerHTML" not in js

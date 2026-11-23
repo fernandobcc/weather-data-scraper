@@ -1,7 +1,7 @@
 ---
 id: T17
 title: Manage cities from the frontend with TinyDB
-status: todo
+status: in_progress
 requirements: R16
 depends_on: T11, T16
 ---

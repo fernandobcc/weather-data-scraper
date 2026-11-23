@@ -11,4 +11,5 @@ GEOCODING_URL = os.getenv("OPEN_METEO_GEOCODING_URL", "https://geocoding-api.ope
 HTTP_TIMEOUT = float(os.getenv("HTTP_TIMEOUT", "10"))
 OUTPUT_DIR = ROOT / os.getenv("OUTPUT_DIR", "output")
 CSV_NAME = "weather_data.csv"
-CITIES_FILE = ROOT / os.getenv("CITIES_FILE", "data/cities.json")
+CITIES_FILE = ROOT / os.getenv("CITIES_FILE", "data/cities.json")  # seed for the city store
+CITIES_DB = ROOT / os.getenv("CITIES_DB", "db/cities.json")
