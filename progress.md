@@ -14,3 +14,7 @@ Roles are defined in `AGENTS.md`.
 
 ## T02: Default city list (Implementer)
 - `weather/cities.py`: the brief's 10 cities as given, a case-insensitive `known_city()` and `parse_city_names()` for user input. 13 tests pass.
+
+## T03: Fetch current weather (Implementer)
+- `weather/client.py`, `http.py`, `errors.py`, `config.py` (dotenv), `.env.example`; `FakeSession` in `tests/conftest.py`. D04–D06.
+- Tests: 20 passed (7 new in `test_client.py`). Live check: 10 default cities fetched in one call (New York 20.4 °C, 4.65 m/s at 20:00 UTC).
