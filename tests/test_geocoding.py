@@ -16,7 +16,8 @@ def test_resolve_defaults_when_no_names(fake_session):
 
 @pytest.mark.parametrize("name", ["tokyo", "  TOKYO ", "Tokyo"])
 def test_catalog_lookup_is_case_insensitive(fake_session, name):
-    assert resolve_cities([name], fake_session, CATALOG) == [{"City": "Tokyo", "Latitude": 35.6895, "Longitude": 139.6917}]
+    tokyo = {"City": "Tokyo", "Latitude": 35.6895, "Longitude": 139.6917}
+    assert resolve_cities([name], fake_session, CATALOG) == [tokyo]
     assert fake_session.calls == []
 
 
@@ -48,7 +49,11 @@ def test_geocoding_outage_raises_upstream_error():
         resolve_cities(["Tokyo", "Lisbon"], FakeSession({"geocoding": broken}), CATALOG)
 
 
-@pytest.mark.parametrize("payload", [[], {"results": [{"name": "X"}]}, {"results": [{"name": "X", "latitude": "n/a", "longitude": 1}]}])
+@pytest.mark.parametrize("payload", [
+    [],
+    {"results": [{"name": "X"}]},
+    {"results": [{"name": "X", "latitude": "n/a", "longitude": 1}]},
+])
 def test_malformed_geocoding_payload_raises_upstream_error(payload):
     with pytest.raises(UpstreamError):
         resolve_cities(["Lisbon"], FakeSession({"geocoding": lambda p: FakeResponse(payload)}), CATALOG)

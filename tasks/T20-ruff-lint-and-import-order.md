@@ -1,7 +1,7 @@
 ---
 id: T20
 title: Ruff lint and import order as a CI gate
-status: todo
+status: in_progress
 requirements: R15
 depends_on: T01, T19
 ---

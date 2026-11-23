@@ -84,7 +84,8 @@ def test_picked_match_is_saved_with_its_coordinates(client):
     """The page posts the picked match with explicit coordinates, so no second lookup can pick another place."""
     illinois = client.get("/api/geocode", params={"name": "Springfield"}).json()[1]
     body = {"name": "Springfield (Illinois)", "latitude": illinois["latitude"], "longitude": illinois["longitude"]}
-    assert client.post("/api/cities", json=body).json() == {"City": "Springfield (Illinois)", "Latitude": 39.8, "Longitude": -89.64}
+    saved = client.post("/api/cities", json=body).json()
+    assert saved == {"City": "Springfield (Illinois)", "Latitude": 39.8, "Longitude": -89.64}
     rows = client.get("/api/weather").json()
     assert "Springfield (Illinois)" in {r["City"] for r in rows}
     assert list(rows[0]) == ["City", "Latitude", "Longitude", "Temperature (C)", "Temperature (F)", "Humidity (%)",
