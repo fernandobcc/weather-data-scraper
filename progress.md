@@ -30,3 +30,7 @@ Roles are defined in `AGENTS.md`.
 ## T06: Ranking and filtering (Implementer)
 - `top_n`, `filter_range` and `rankings` (hottest / coldest / most humid / driest / windiest, JSON-safe values) in `weather/processing.py`.
 - Tests: 35 passed (3 new).
+
+## T07: Pipeline and CSV export (Implementer)
+- `weather/pipeline.py` (resolve → fetch → process) and `weather/export.py`. D09.
+- Tests: 38 passed (3 new); the CSV header equals the data contract, there is no index column, and an end-to-end run makes 3 HTTP calls (2 geocodes + 1 forecast).
