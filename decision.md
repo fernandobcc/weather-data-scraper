@@ -34,3 +34,7 @@ the task that made it.
 ## D07: Geocoding as a fallback, degrading per name (T04)
 - **Decision:** Names in the default list use the brief's coordinates; any other name goes to the Open-Meteo geocoding API (same provider, no key). A name that can't be resolved, or whose lookup fails, is skipped with a warning. Results are de-duplicated by name and coordinates.
 - **Consequence:** Default runs make no geocoding calls; the bonus works for any city; a partial outage doesn't fail the whole request.
+
+## D08: CSV columns are a superset of the brief's example (T05)
+- **Decision:** Keep the brief's six columns in order, and add `Latitude`, `Longitude`, `Observed At (UTC)` and `Temperature Rank`. Measurements are rounded to 1 decimal, coordinates to 4. Humidity is a nullable integer. The column order is defined once (`processing.COLUMNS`).
+- **Consequence:** The CSV says where, when and in what order, and the brief's example rows reproduce exactly (tested).

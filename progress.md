@@ -22,3 +22,7 @@ Roles are defined in `AGENTS.md`.
 ## T04: Geocoding (Implementer)
 - `weather/geocoding.py`: catalog first, then Open-Meteo geocoding; skips unknown or failing names; dedupes. D07.
 - Tests: 24 passed (4 new). Live: `Lisbon` resolved (38.7251, -9.1498), `Qwxzzyville` skipped with a warning, `tokyo` matched the default list.
+
+## T05: DataFrame with derived units (Implementer)
+- `weather/processing.py`: `COLUMNS`, `celsius_to_fahrenheit`, `ms_to_mph`, `build_dataframe` (rounding, sort, rank, nullable humidity). D08.
+- Tests: 32 passed (8 new); the brief's three example rows reproduce exactly.
