@@ -53,3 +53,7 @@ Roles are defined in `AGENTS.md`.
 - `frontend/` (HTML + Chart.js + CSS with light/dark tokens), served at `/` with static assets. D11.
 - Tests: 64 passed (3 new).
 - Browser (live API): 5 tiles and 10 rows on load; wind + °F/mph switched the title to "Wind speed (mph)"; `Lisbon, Nairobi, Qwxzzyville` showed 2 rows; `Qwxzzyville` alone showed the inline error.
+
+## T12: Notebook and deliverables (Implementer, Tester)
+- `scripts/build_notebook.py`, `scripts/check_notebook.py`; `output/` = `weather_data.csv`, three chart PNGs, `weather_analysis.ipynb`, from a live run at 2026-11-23T20:15 UTC (hottest: Mumbai 27.1 °C). D12.
+- Notebook check: no errors, every cell has output, 3 chart images.
