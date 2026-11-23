@@ -1,18 +1,21 @@
 """FastAPI app: uvicorn api.main:app --reload"""
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import Response
+from fastapi.responses import FileResponse, Response
+from fastapi.staticfiles import StaticFiles
 
 from api import service
-from weather.config import CSV_NAME
+from weather.config import CSV_NAME, ROOT
 from weather.errors import UpstreamError
 from weather.export import to_csv_text
 from weather.plots import METRICS, bar_chart, to_png_bytes
 from weather.processing import rankings
 
+FRONTEND = ROOT / "frontend"
 CitiesQuery = Query(None, description="Comma-separated city names; empty = default 10 cities")
 
 app = FastAPI(title="Weather Scraper API", version="1.0.0")
+app.mount("/static", StaticFiles(directory=FRONTEND), name="static")
 
 
 def load(cities: str | None) -> pd.DataFrame:
@@ -23,6 +26,11 @@ def load(cities: str | None) -> pd.DataFrame:
     if df.empty:
         raise HTTPException(404, "None of the requested cities could be resolved")
     return df
+
+
+@app.get("/", include_in_schema=False)
+def index():
+    return FileResponse(FRONTEND / "index.html")
 
 
 @app.get("/health")

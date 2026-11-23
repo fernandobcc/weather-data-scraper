@@ -1,7 +1,7 @@
 ---
 id: T11
 title: Interactive dashboard
-status: todo
+status: in_progress
 requirements: R13
 depends_on: T10
 ---

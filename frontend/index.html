@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body class="viz-root">
+  <header>
+    <h1>Current weather</h1>
+    <p class="muted">Live data from Open-Meteo · <span id="observed">loading…</span></p>
+  </header>
+
+  <form id="controls">
+    <input id="cities" type="text" placeholder="New York, Tokyo, Lisbon… (empty = default 10 cities)" aria-label="Cities">
+    <button type="submit">Load</button>
+    <div class="segmented" role="tablist" aria-label="Metric">
+      <button type="button" data-metric="temperature" class="active">Temperature</button>
+      <button type="button" data-metric="humidity">Humidity</button>
+      <button type="button" data-metric="wind">Wind</button>
+    </div>
+    <label class="unit"><input id="imperial" type="checkbox"> °F / mph</label>
+    <a id="download" class="button-link" href="/api/weather.csv">Download CSV</a>
+  </form>
+
+  <p id="error" role="alert" hidden></p>
+
+  <section id="tiles" class="tiles"></section>
+
+  <section class="card">
+    <h2 id="chart-title">Temperature</h2>
+    <div class="chart-wrap"><canvas id="chart" aria-label="Bar chart of the selected metric by city"></canvas></div>
+  </section>
+
+  <section class="card">
+    <h2>Server-rendered chart (matplotlib, metric units)</h2>
+    <img id="png" alt="matplotlib bar chart of the selected metric">
+  </section>
+
+  <section class="card">
+    <h2>Data</h2>
+    <div class="table-wrap"><table id="table"></table></div>
+  </section>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
