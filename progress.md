@@ -26,3 +26,7 @@ Roles are defined in `AGENTS.md`.
 ## T05: DataFrame with derived units (Implementer)
 - `weather/processing.py`: `COLUMNS`, `celsius_to_fahrenheit`, `ms_to_mph`, `build_dataframe` (rounding, sort, rank, nullable humidity). D08.
 - Tests: 32 passed (8 new); the brief's three example rows reproduce exactly.
+
+## T06: Ranking and filtering (Implementer)
+- `top_n`, `filter_range` and `rankings` (hottest / coldest / most humid / driest / windiest, JSON-safe values) in `weather/processing.py`.
+- Tests: 35 passed (3 new).
