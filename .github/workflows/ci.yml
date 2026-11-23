@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # check_tasks.py reads Tnn: commits from history
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - name: Tests
+        run: uv run pytest -q
+      - name: Types
+        run: uv run pyright
+      - name: Task harness (re-verifies every done task)
+        run: uv run python scripts/check_tasks.py
