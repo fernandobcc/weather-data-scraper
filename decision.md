@@ -12,3 +12,7 @@ the task that made it.
 - **Context:** Agents (and people) tend to call work "done" too early, and a tracker can drift from what actually happened.
 - **Decision:** One file per task in `tasks/` with a Definition of done and offline Verify commands. `scripts/check_tasks.py` refuses a `done` task with unchecked boxes, failing commands, unfinished dependencies, or no `Tnn:` commit in git history, and keeps `feature_list.json` in sync. One PR per task.
 - **Consequence:** The task board, the feature list and the git history can't disagree without CI failing. Re-running every done task's checks on each PR also catches regressions.
+
+## D03: Tooling: uv, pyright, GitHub Actions (T01)
+- **Decision:** `uv` manages Python 3.12 and the lockfile. `pyright[nodejs]` runs in standard mode; the `nodejs` extra bundles Node, so no system Node is needed. CI runs pytest, pyright and `check_tasks.py` on every PR, with full git history (`fetch-depth: 0`) so the harness can see `Tnn:` commits.
+- **Consequence:** Installs are reproducible, and every merge re-verifies every done task. Runtime dependencies are added by the task that first needs them, so `pyproject.toml` grows along with the history.
