@@ -38,3 +38,7 @@ the task that made it.
 ## D08: CSV columns are a superset of the brief's example (T05)
 - **Decision:** Keep the brief's six columns in order, and add `Latitude`, `Longitude`, `Observed At (UTC)` and `Temperature Rank`. Measurements are rounded to 1 decimal, coordinates to 4. Humidity is a nullable integer. The column order is defined once (`processing.COLUMNS`).
 - **Consequence:** The CSV says where, when and in what order, and the brief's example rows reproduce exactly (tested).
+
+## D09: One pipeline, thin adapters (T07)
+- **Decision:** `weather.pipeline.run(names, session)` (resolve → fetch → process) is the only composition point. The CLI, the API and the notebook all call it.
+- **Consequence:** No logic is duplicated across adapters, and each adapter stays small and easy to test.
