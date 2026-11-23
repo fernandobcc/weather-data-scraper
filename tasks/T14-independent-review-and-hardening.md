@@ -1,7 +1,7 @@
 ---
 id: T14
 title: Independent review and hardening
-status: todo
+status: in_progress
 requirements: R1, R3, R7, R12, R13
 depends_on: T12, T13
 ---
