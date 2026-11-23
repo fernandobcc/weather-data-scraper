@@ -1,7 +1,7 @@
 ---
 id: T02
 title: Default city list from the brief
-status: todo
+status: in_progress
 requirements: R2
 depends_on: T01
 ---
