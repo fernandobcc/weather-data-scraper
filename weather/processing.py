@@ -39,3 +39,36 @@ def build_dataframe(records: list[dict]) -> pd.DataFrame:
     df = df.sort_values("Temperature (C)", ascending=False, ignore_index=True)
     df["Temperature Rank"] = df["Temperature (C)"].rank(ascending=False, method="min").astype("Int64")
     return df.reindex(columns=COLUMNS)
+
+
+def top_n(df: pd.DataFrame, column: str, n: int = 3, ascending: bool = False) -> pd.DataFrame:
+    return df.sort_values(column, ascending=ascending).head(n)
+
+
+def filter_range(df: pd.DataFrame, column: str, min_value: float | None = None,
+                 max_value: float | None = None) -> pd.DataFrame:
+    mask = pd.Series(True, index=df.index)
+    if min_value is not None:
+        mask &= df[column] >= min_value
+    if max_value is not None:
+        mask &= df[column] <= max_value
+    return df.loc[mask]
+
+
+def rankings(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
+    """Headline extremes used by the CLI, API and notebook."""
+    if df.empty:
+        return {}
+
+    def pick(column: str, largest: bool) -> dict[str, Any]:
+        row = df.loc[df[column].idxmax() if largest else df[column].idxmin()]
+        value = row[column]
+        return {"city": row["City"], "value": getattr(value, "item", lambda: value)(), "metric": column}
+
+    return {
+        "hottest": pick("Temperature (C)", True),
+        "coldest": pick("Temperature (C)", False),
+        "most_humid": pick("Humidity (%)", True),
+        "driest": pick("Humidity (%)", False),
+        "windiest": pick("Wind Speed (m/s)", True),
+    }
