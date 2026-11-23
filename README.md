@@ -69,6 +69,11 @@ The saved list starts as the 10 cities from the brief ([`data/cities.json`](data
 and lives in a small [TinyDB](https://tinydb.readthedocs.io/) file, `db/cities.json`.
 Use the **Cities** page or the API to add a city by name (its coordinates are looked
 up once) or with explicit coordinates, and to remove one. Up to 25 cities.
+
+**Same name in several places?** Type it and press **Find**: the page lists the matches
+with region and country (e.g. five Springfields). Pick one to save its exact coordinates.
+When names collide, the suggested name includes the region, e.g. `Springfield (Illinois)`,
+so the CSV columns stay the same. Without Find, the best match is used.
 A one-off `--cities` run or the dashboard input doesn't change the saved list.
 To reset, delete `db/cities.json`.
 
@@ -81,6 +86,7 @@ To reset, delete `db/cities.json`.
 | `GET /api/charts/{temperature\|humidity\|wind}.png` | matplotlib PNG |
 | `GET /api/weather.csv?cities=A,B` | CSV download |
 | `GET /api/cities` · `POST /api/cities` · `DELETE /api/cities/{name}` | Saved city list |
+| `GET /api/geocode?name=X` | Up to 5 matching places (to pick among same-name cities) |
 | `GET /health` | Liveness |
 
 `cities` is optional and defaults to the saved list. Unknown names are skipped (`404` if
@@ -90,11 +96,11 @@ The full contract is in [`specs/spec.md`](specs/spec.md).
 ## Project layout
 
 ```
-├── specs/spec.md       requirements R1–R16, data and API contracts (source of truth)
+├── specs/spec.md       requirements R1–R17, data and API contracts (source of truth)
 ├── tasks/              one file per task: Definition of done + Verify commands
 ├── feature_list.json   features ↔ requirements ↔ tasks
 ├── progress.md         work log, one entry per task (incl. the review findings)
-├── decision.md         architecture decisions D01–D16
+├── decision.md         architecture decisions D01–D17
 ├── AGENTS.md           how agents and humans work here (CLAUDE.md imports it)
 ├── weather/            core package, one concern per module
 │   ├── cities.py         load data/cities.json, parse and limit input
@@ -168,6 +174,7 @@ regression test or explicitly accepted. The findings table is in [`progress.md`]
 - **Injected sessions and one `UpstreamError` type,** so tests use no network and adapters map errors to 502 or exit 1 (D06, D14).
 - **One pipeline, thin adapters:** the CLI, the API and the notebook share `pipeline.run()` (D09).
 - **Data, not code:** the default city list is a JSON seed, and the saved list lives in TinyDB (D15, D16).
+- **Same-name cities are picked, not guessed:** the user chooses among geocoding matches, and the CSV columns stay fixed (D17).
 
 ## Suggestions / next steps
 
