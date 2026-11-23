@@ -1,7 +1,7 @@
 ---
 id: T03
 title: Fetch current weather from Open-Meteo
-status: todo
+status: in_progress
 requirements: R1, R10
 depends_on: T02
 ---
