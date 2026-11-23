@@ -38,3 +38,8 @@ Roles are defined in `AGENTS.md`.
 ## T08: Command-line interface (Implementer)
 - `main.py`: `--cities`, `--interactive`, `--sort-by`; prints the table and highlights; writes `output/weather_data.csv`; exits 1 when nothing resolves or on `UpstreamError`. `OUTPUT_DIR` configurable.
 - Tests: 42 passed (4 new). Live: `--cities "Lisbon, Tokyo, Nairobi"` printed the table and highlights (hottest Nairobi 17.0 °C) and wrote the CSV.
+
+## T09: matplotlib charts (Implementer, Tester)
+- `weather/plots.py`: horizontal bar charts for temperature, humidity and wind (Agg backend, sorted, values labelled); `main.py` saves them unless `--no-charts`.
+- Manual check found humidity labelled `94.0`; fixed with a per-metric label format and a regression test.
+- Tests: 49 passed (7 new).
