@@ -30,3 +30,7 @@ the task that made it.
 ## D06: Injected `requests.Session` with retries; one upstream error type (T03)
 - **Decision:** `make_session()` retries 429/5xx with backoff. Functions take `session` as a parameter. HTTP errors, bad JSON, payload-shape errors and location-count mismatches all raise `weather.errors.UpstreamError`.
 - **Consequence:** Tests use `FakeSession`, with no network and no mocking library. Adapters handle one exception type: the API maps it to 502 and the CLI to exit code 1.
+
+## D07: Geocoding as a fallback, degrading per name (T04)
+- **Decision:** Names in the default list use the brief's coordinates; any other name goes to the Open-Meteo geocoding API (same provider, no key). A name that can't be resolved, or whose lookup fails, is skipped with a warning. Results are de-duplicated by name and coordinates.
+- **Consequence:** Default runs make no geocoding calls; the bonus works for any city; a partial outage doesn't fail the whole request.

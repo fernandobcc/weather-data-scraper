@@ -18,3 +18,7 @@ Roles are defined in `AGENTS.md`.
 ## T03: Fetch current weather (Implementer)
 - `weather/client.py`, `http.py`, `errors.py`, `config.py` (dotenv), `.env.example`; `FakeSession` in `tests/conftest.py`. D04–D06.
 - Tests: 20 passed (7 new in `test_client.py`). Live check: 10 default cities fetched in one call (New York 20.4 °C, 4.65 m/s at 20:00 UTC).
+
+## T04: Geocoding (Implementer)
+- `weather/geocoding.py`: catalog first, then Open-Meteo geocoding; skips unknown or failing names; dedupes. D07.
+- Tests: 24 passed (4 new). Live: `Lisbon` resolved (38.7251, -9.1498), `Qwxzzyville` skipped with a warning, `tokyo` matched the default list.
