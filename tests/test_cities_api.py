@@ -56,3 +56,36 @@ def test_geocoder_outage_is_502(client, monkeypatch):
 
 def test_delete_unknown_city(client):
     assert client.delete("/api/cities/Atlantis").status_code == 404
+
+
+def test_geocode_lists_same_name_matches(client):
+    res = client.get("/api/geocode", params={"name": " springfield "})
+    assert [m["admin1"] for m in res.json()] == ["Missouri", "Illinois"]
+
+
+@pytest.mark.parametrize("name", ["", "x" * 101])
+def test_geocode_rejects_bad_names(client, name):
+    assert client.get("/api/geocode", params={"name": name}).status_code == 422
+
+
+def test_geocode_outage_is_502(client, monkeypatch):
+    import requests
+
+    from tests.conftest import FakeSession
+
+    def down(params):
+        raise requests.ConnectionError("down")
+
+    monkeypatch.setattr(api.main, "make_session", lambda: FakeSession({"geocoding": down}))
+    assert client.get("/api/geocode", params={"name": "Lisbon"}).status_code == 502
+
+
+def test_picked_match_is_saved_with_its_coordinates(client):
+    """The page posts the picked match with explicit coordinates, so no second lookup can pick another place."""
+    illinois = client.get("/api/geocode", params={"name": "Springfield"}).json()[1]
+    body = {"name": "Springfield (Illinois)", "latitude": illinois["latitude"], "longitude": illinois["longitude"]}
+    assert client.post("/api/cities", json=body).json() == {"City": "Springfield (Illinois)", "Latitude": 39.8, "Longitude": -89.64}
+    rows = client.get("/api/weather").json()
+    assert "Springfield (Illinois)" in {r["City"] for r in rows}
+    assert list(rows[0]) == ["City", "Latitude", "Longitude", "Temperature (C)", "Temperature (F)", "Humidity (%)",
+                             "Wind Speed (m/s)", "Wind Speed (mph)", "Observed At (UTC)", "Temperature Rank"]

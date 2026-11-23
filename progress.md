@@ -106,3 +106,10 @@ A separate agent received only `specs/spec.md`, the AGENTS.md conventions and th
 - Reported by the stakeholder: GitHub showed "Error in user YAML: mapping values are not allowed" on T15. Cause: unquoted `:` in the T01 and T15 titles. The checker's hand-rolled parser accepted it, so the harness had a blind spot.
 - Test first: `test_front_matter_is_valid_yaml` parses every task header with PyYAML; it failed with GitHub's exact error before the fix. Titles quoted, the checker strips quotes, and the rule is in `tasks/README.md`.
 - 100 tests pass, pyright 0 errors. GitHub (branch preview): T01 and T15 headers render as tables with no error.
+
+## T19: Pick among same-name cities (Planner, Implementer, Tester)
+- Stakeholder question: what happens with a city name that exists in several places? Checked live: "Springfield" silently became Springfield, Missouri; "Springfield, IL" in the dashboard input split into "Springfield" + "IL" → Il, Kenya. The stakeholder chose picking over new columns.
+- Planner commit first: R17, the `/api/geocode` contract row, a note that the column set is fixed, F13 extended, task T19. D17.
+- `geocoding.search()` (`geocode()` = its first match), `GET /api/geocode`, Find button + match list on the Cities page (rendered with `textContent`).
+- Tests: 108 passed (8 new, including a picked match saved with its exact coordinates and the CSV header unchanged). Pyright 0 errors.
+- Browser (live geocoder, throwaway DB so the user's local list wasn't touched): "Springfield" → 5 matches (MO, IL, MA, OH, TN). Picked Illinois, then Missouri; both saved as `Springfield (Illinois)` / `Springfield (Missouri)` with their own weather (4.6 °C / 6.1 °C); columns unchanged.

@@ -52,3 +52,19 @@ def test_geocoding_outage_raises_upstream_error():
 def test_malformed_geocoding_payload_raises_upstream_error(payload):
     with pytest.raises(UpstreamError):
         resolve_cities(["Lisbon"], FakeSession({"geocoding": lambda p: FakeResponse(payload)}), CATALOG)
+
+
+def test_search_returns_all_matches_with_region(fake_session):
+    from weather.geocoding import search
+
+    matches = search("Springfield", fake_session)
+    assert [(m["name"], m["admin1"], m["country"]) for m in matches] == [
+        ("Springfield", "Missouri", "United States"), ("Springfield", "Illinois", "United States"),
+    ]
+    assert fake_session.calls[0][1]["count"] == 5
+
+
+def test_geocode_is_the_first_search_match(fake_session):
+    assert resolve_cities(["Springfield"], fake_session, CATALOG) == [
+        {"City": "Springfield", "Latitude": 37.22, "Longitude": -93.3},
+    ]

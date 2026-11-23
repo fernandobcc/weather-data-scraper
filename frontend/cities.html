@@ -19,9 +19,11 @@
       <label>Name <input id="name" required maxlength="100" placeholder="Lisbon"></label>
       <label>Latitude <input id="lat" type="number" step="any" min="-90" max="90" placeholder="optional"></label>
       <label>Longitude <input id="lon" type="number" step="any" min="-180" max="180" placeholder="optional"></label>
+      <button type="button" id="find">Find</button>
       <button type="submit">Add</button>
     </form>
-    <p class="hint">Leave the coordinates empty to look them up automatically. Up to 25 cities.</p>
+    <div id="matches" class="matches" aria-label="Matching places"></div>
+    <p class="hint">Same name in several places (e.g. Springfield)? Use <strong>Find</strong> and pick one. Leave the coordinates empty to take the best match. Up to 25 cities.</p>
     <p id="status" role="status"></p>
   </section>
 

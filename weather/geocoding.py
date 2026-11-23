@@ -9,18 +9,27 @@ from weather.errors import UpstreamError
 log = logging.getLogger(__name__)
 
 
-def geocode(name: str, session: requests.Session) -> dict | None:
-    """Best match on the Open-Meteo geocoding API; None if not found, UpstreamError if the API fails."""
+def search(name: str, session: requests.Session, count: int = 5) -> list[dict]:
+    """Up to `count` Open-Meteo geocoding matches, best first; UpstreamError if the API fails."""
     try:
-        resp = session.get(GEOCODING_URL, params={"name": name, "count": 1}, timeout=HTTP_TIMEOUT)
+        resp = session.get(GEOCODING_URL, params={"name": name, "count": count}, timeout=HTTP_TIMEOUT)
         resp.raise_for_status()
-        results = resp.json().get("results") or []
-        if not results:
-            return None
-        hit = results[0]
-        return {"City": str(hit["name"]), "Latitude": float(hit["latitude"]), "Longitude": float(hit["longitude"])}
+        return [
+            {"name": str(hit["name"]), "admin1": str(hit.get("admin1") or ""), "country": str(hit.get("country") or ""),
+             "latitude": float(hit["latitude"]), "longitude": float(hit["longitude"])}
+            for hit in (resp.json().get("results") or [])[:count]
+        ]
     except (requests.RequestException, ValueError, KeyError, TypeError, AttributeError) as exc:
         raise UpstreamError(f"geocoding failed for {name!r}: {exc}") from exc
+
+
+def geocode(name: str, session: requests.Session) -> dict | None:
+    """Best match as a city record; None if not found."""
+    matches = search(name, session, count=1)
+    if not matches:
+        return None
+    best = matches[0]
+    return {"City": best["name"], "Latitude": best["latitude"], "Longitude": best["longitude"]}
 
 
 def resolve_cities(names: list[str], session: requests.Session, catalog: list[dict]) -> list[dict]:
