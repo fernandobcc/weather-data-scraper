@@ -1,6 +1,6 @@
 ---
 id: T01
-title: Project tooling: uv, pytest, pyright and CI
+title: "Project tooling: uv, pytest, pyright and CI"
 status: done
 requirements: R15
 depends_on: T00
