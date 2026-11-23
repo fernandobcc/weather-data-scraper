@@ -57,3 +57,7 @@ Roles are defined in `AGENTS.md`.
 ## T12: Notebook and deliverables (Implementer, Tester)
 - `scripts/build_notebook.py`, `scripts/check_notebook.py`; `output/` = `weather_data.csv`, three chart PNGs, `weather_analysis.ipynb`, from a live run at 2026-11-23T20:15 UTC (hottest: Mumbai 27.1 °C). D12.
 - Notebook check: no errors, every cell has output, 3 chart images.
+
+## T13: Docker (Implementer, Tester)
+- `Dockerfile`, `docker-compose.yml` (API + `cli` profile), `.dockerignore`. D13.
+- Built locally; container `/health`, `/api/weather?cities=Lisbon`, `/` and `/api/charts/wind.png` → 200. The image contains only `api`, `frontend`, `weather`, `main.py` and the lock files.
