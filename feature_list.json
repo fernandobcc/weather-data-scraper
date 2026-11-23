@@ -138,9 +138,10 @@
         "T01",
         "T13",
         "T15",
-        "T18"
+        "T18",
+        "T20"
       ],
-      "status": "done"
+      "status": "in_progress"
     },
     {
       "id": "F13",
