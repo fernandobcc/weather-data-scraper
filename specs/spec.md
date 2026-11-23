@@ -24,6 +24,7 @@ in `feature_list.json` points back to a requirement ID below.
 | R14 | Jupyter notebook with the analysis, plus generated deliverables, in `output/` | Stakeholder request |
 | R15 | README with run instructions, approach and suggestions; uv, pyright and Docker tooling | Submission + stakeholder request |
 | R16 | Manage the saved city list (list / add / remove) from the frontend, persisted in TinyDB | Stakeholder request (after T16) |
+| R17 | When a city name exists in several places, let the user pick the right one on the Cities page; the CSV columns stay unchanged | Stakeholder request (after T18) |
 
 ## Data contract
 
@@ -35,6 +36,7 @@ CSV columns, in order:
 - Measurements are rounded to 1 decimal and coordinates to 4; humidity is an integer (nullable).
 - `F = C * 9/5 + 32`, `mph = m/s * 2.236936` (mph is computed from the unrounded m/s).
 - Duplicate cities (same name and coordinates) are dropped.
+- The column set is fixed (stakeholder decision in R17): disambiguation lives in the saved `City` name, e.g. `Springfield (Illinois)`, not in extra columns.
 
 ## API contract (FastAPI)
 
@@ -47,6 +49,7 @@ CSV columns, in order:
 | GET | `/api/charts/{metric}.png?cities=A,B` | matplotlib PNG; metric ∈ temperature, humidity, wind; unknown metric → `404` |
 | GET | `/api/weather.csv?cities=A,B` | CSV download (`weather_data.csv`) |
 | GET | `/cities` | City management page (HTML) |
+| GET | `/api/geocode?name=X` | Up to 5 matches `{name, admin1, country, latitude, longitude}`; `422` empty or too long; `502` geocoder down |
 | GET | `/api/cities` | Saved cities |
 | POST | `/api/cities` | Body `{name, latitude?, longitude?}` (both coordinates or neither) → `201` city; `409` duplicate or list full (25); `404` name not found; `422` invalid; `502` geocoder down |
 | DELETE | `/api/cities/{name}` | `204`; `404` if not saved (case-insensitive) |
