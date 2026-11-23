@@ -11,3 +11,6 @@ Roles are defined in `AGENTS.md`.
 ## T01: Project tooling (Implementer)
 - `pyproject.toml` (Python 3.12, uv, dev: pytest, pyright[nodejs]), `.github/workflows/ci.yml`, `tests/test_tasks.py` (task files valid; feature list in sync; the checker rejects done tasks with no commit or unchecked boxes). D03.
 - Gates: 4 passed, pyright 0 errors.
+
+## T02: Default city list (Implementer)
+- `weather/cities.py`: the brief's 10 cities as given, a case-insensitive `known_city()` and `parse_city_names()` for user input. 13 tests pass.
