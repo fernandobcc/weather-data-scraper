@@ -15,6 +15,7 @@ COPY --chown=app api ./api
 COPY --chown=app frontend ./frontend
 COPY --chown=app data ./data
 COPY --chown=app main.py ./
+RUN mkdir -p /app/db  # owned by app, so the compose volume is writable
 
 EXPOSE 8000
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

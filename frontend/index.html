@@ -9,13 +9,14 @@
           integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt" crossorigin="anonymous"></script>
 </head>
 <body class="viz-root">
+  <nav class="nav"><a href="/" aria-current="page">Dashboard</a><a href="/cities">Cities</a></nav>
   <header>
     <h1>Current weather</h1>
     <p class="muted">Live data from Open-Meteo · <span id="observed">loading…</span></p>
   </header>
 
   <form id="controls">
-    <input id="cities" type="text" placeholder="New York, Tokyo, Lisbon… (empty = default 10 cities)" aria-label="Cities">
+    <input id="cities" type="text" placeholder="New York, Tokyo, Lisbon… (empty = your saved cities)" aria-label="Cities">
     <button type="submit">Load</button>
     <div class="segmented" role="tablist" aria-label="Metric">
       <button type="button" data-metric="temperature" class="active">Temperature</button>

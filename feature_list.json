@@ -140,6 +140,17 @@
         "T15"
       ],
       "status": "in_progress"
+    },
+    {
+      "id": "F13",
+      "title": "Manage saved cities from the frontend (TinyDB)",
+      "requirements": [
+        "R16"
+      ],
+      "tasks": [
+        "T17"
+      ],
+      "status": "done"
     }
   ]
 }

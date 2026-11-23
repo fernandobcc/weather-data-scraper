@@ -6,6 +6,8 @@ services:
     env_file:
       - path: .env
         required: false
+    volumes:
+      - city-db:/app/db   # saved cities survive restarts
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
@@ -18,4 +20,8 @@ services:
     command: ["python", "main.py"]
     volumes:
       - ./output:/app/output
+      - city-db:/app/db
     profiles: ["cli"]
+
+volumes:
+  city-db:

@@ -68,3 +68,21 @@ table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-nu
 th, td { padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
 th:first-child, td:first-child { text-align: left; }
 th { color: var(--text-secondary); font-weight: 600; }
+.nav { display: flex; gap: 16px; margin-bottom: 16px; font-size: 14px; }
+.nav a { color: var(--text-secondary); text-decoration: none; padding-bottom: 2px; }
+.nav a[aria-current="page"] { color: var(--text-primary); border-bottom: 2px solid var(--series-1); }
+
+.add-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: end; }
+.add-form label { display: grid; gap: 4px; font-size: 13px; color: var(--text-secondary); }
+.add-form input {
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-0); color: var(--text-primary); font: inherit;
+}
+.hint { color: var(--text-secondary); font-size: 13px; margin: 8px 0 0; }
+#status { margin: 8px 0 0; font-size: 14px; }
+#status.ok { color: var(--text-primary); }
+#status.ok::before { content: "✓ "; color: var(--series-1); }
+#status.error { color: var(--critical); }
+#status.error::before { content: "⚠ "; }
+button.danger { padding: 4px 10px; font-size: 13px; }
+button.danger:hover { border-color: var(--critical); color: var(--critical); }
+@media (max-width: 640px) { .add-form { grid-template-columns: 1fr 1fr; } }

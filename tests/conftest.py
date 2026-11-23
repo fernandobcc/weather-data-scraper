@@ -6,6 +6,10 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from weather import city_store  # noqa: E402
+from weather.city_store import CityStore  # noqa: E402
+from weather.config import CITIES_FILE  # noqa: E402
+
 
 class FakeResponse:
     def __init__(self, payload, status=200):
@@ -55,3 +59,11 @@ def geocoding_handler(params):
 @pytest.fixture
 def fake_session():
     return FakeSession({"forecast": forecast_handler, "geocoding": geocoding_handler})
+
+
+@pytest.fixture(autouse=True)
+def store(tmp_path, monkeypatch):
+    """Every test gets a fresh TinyDB seeded with the brief's cities; the real db/ is never touched."""
+    test_store = CityStore(tmp_path / "cities.json", CITIES_FILE)
+    monkeypatch.setattr(city_store, "get_store", lambda: test_store)
+    return test_store
