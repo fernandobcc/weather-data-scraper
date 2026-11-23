@@ -31,7 +31,7 @@ the task that made it.
 - **Decision:** `make_session()` retries 429/5xx with backoff. Functions take `session` as a parameter. HTTP errors, bad JSON, payload-shape errors and location-count mismatches all raise `weather.errors.UpstreamError`.
 - **Consequence:** Tests use `FakeSession`, with no network and no mocking library. Adapters handle one exception type: the API maps it to 502 and the CLI to exit code 1.
 
-## D07: Geocoding as a fallback, degrading per name (T04)
+## D07: Geocoding as a fallback, degrading per name (T04). *Partly superseded by D14*
 - **Decision:** Names in the default list use the brief's coordinates; any other name goes to the Open-Meteo geocoding API (same provider, no key). A name that can't be resolved, or whose lookup fails, is skipped with a warning. Results are de-duplicated by name and coordinates.
 - **Consequence:** Default runs make no geocoding calls; the bonus works for any city; a partial outage doesn't fail the whole request.
 
@@ -43,7 +43,7 @@ the task that made it.
 - **Decision:** `weather.pipeline.run(names, session)` (resolve → fetch → process) is the only composition point. The CLI, the API and the notebook all call it.
 - **Consequence:** No logic is duplicated across adapters, and each adapter stays small and easy to test.
 
-## D10: In-memory TTL cache with a lock in the API (T10)
+## D10: In-memory TTL cache with a lock in the API (T10). *Locking refined by D14*
 - **Context:** One dashboard load hits several endpoints (data, rankings, a chart) for the same cities.
 - **Decision:** Cache pipeline results for 5 min (Open-Meteo "current" data refreshes every 15 min), keyed by the *set* of city names (order and case don't matter), capped at 128 entries. A lock makes concurrent cache misses share one upstream call.
 - **Consequence:** One upstream call per page load. The cache is per-process; use Redis if the API scales out.
@@ -59,3 +59,13 @@ the task that made it.
 ## D13: Slim image installed from the lockfile (T13)
 - **Decision:** `python:3.12-slim` with the uv binary copied from `ghcr.io/astral-sh/uv:0.9` (the lockfile format matches uv 0.9), and `uv sync --frozen --no-dev`. Only runtime code is copied (`.dockerignore` excludes tests, specs, tasks, scripts, output). Compose runs the API with a healthcheck; a `cli` profile writes to `./output`.
 - **Consequence:** The image matches the locked environment exactly and stays small.
+
+## D14: Hardening after the independent review (T14)
+- **Context:** A reviewer agent with only the spec and the code found 12 issues (see `progress.md`).
+- **Decision:**
+  - **"Not found" ≠ "provider down".** A geocoding outage or malformed payload now raises `UpstreamError` (API 502) instead of silently skipping the name (this supersedes that part of D07). Unknown names are still skipped. Failures are never cached.
+  - **Bounded input:** at most 25 names of up to 100 characters (API 422, CLI exit 2).
+  - **One lock per city set,** so a slow upstream call only blocks requests for the same set (refines D10).
+  - **Charts built on `matplotlib.figure.Figure`,** without pyplot's global state, so they are thread-safe in the API.
+  - **The API never echoes upstream error text.** Chart.js is pinned with SRI. The container runs as non-root.
+- **Consequence:** Error semantics match the spec, one request can no longer stall the API, and the dashboard keeps working when a metric is all null.

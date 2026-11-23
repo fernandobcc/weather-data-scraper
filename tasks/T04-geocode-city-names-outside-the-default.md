@@ -15,7 +15,7 @@ Any city name works: names that aren't in the default list get coordinates from 
 ## Definition of done
 - [x] Default-list coordinates win; other names are geocoded
 - [x] Unresolvable names are skipped with a warning
-- [x] A geocoding outage skips only that name
+- [x] A geocoding outage skips only that name *(changed in T14/D14: an outage is now a 502)*
 - [x] Duplicates (same name and coordinates) are dropped
 
 ## Verify
