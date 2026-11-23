@@ -1,7 +1,7 @@
 ---
 id: T07
 title: Pipeline and CSV export
-status: todo
+status: in_progress
 requirements: R7
 depends_on: T04, T05
 ---
