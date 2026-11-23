@@ -33,7 +33,7 @@ docker compose run --rm cli                      # CLI run, writes ./output
 Quality gates (the same ones CI runs on every PR):
 
 ```bash
-uv run pytest -q                                 # 99 tests, offline
+uv run pytest -q                                 # offline (HTTP is faked)
 uv run pyright                                   # 0 errors
 uv run python scripts/check_tasks.py             # re-verifies every done task
 ```
