@@ -1,7 +1,7 @@
 ---
 id: T15
 title: README: run guide, approach and suggestions
-status: todo
+status: in_progress
 requirements: R15
 depends_on: T14
 ---
