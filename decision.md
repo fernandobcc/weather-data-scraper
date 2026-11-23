@@ -69,3 +69,8 @@ the task that made it.
   - **Charts built on `matplotlib.figure.Figure`,** without pyplot's global state, so they are thread-safe in the API.
   - **The API never echoes upstream error text.** Chart.js is pinned with SRI. The container runs as non-root.
 - **Consequence:** Error semantics match the spec, one request can no longer stall the API, and the dashboard keeps working when a metric is all null.
+
+## D15: The city list is data, not code (T16)
+- **Context:** Reviewer finding #11: the default cities were a Python dict, so changing them meant finding and editing code.
+- **Decision:** `data/cities.json` holds the list (path set by `CITIES_FILE`). Each entry needs `City`; `Latitude`/`Longitude` are optional and missing ones are geocoded. `resolve_cities` treats the list and user-typed names the same way.
+- **Consequence:** Adding a default city is a one-line JSON edit. The brief's coordinates are still used as given, so a default run makes no geocoding calls.

@@ -1,7 +1,7 @@
 ---
 id: T16
 title: Default city list as a data file
-status: in_progress
+status: done
 requirements: R2
 depends_on: T14
 ---
@@ -14,10 +14,10 @@ The default cities live in a data file instead of a Python module, so changing t
 - Out of scope: editing the list from the UI.
 
 ## Definition of done
-- [ ] The 10 attached cities live in `data/cities.json` with unchanged coordinates
-- [ ] Entries may omit coordinates; those are geocoded
-- [ ] No city list remains in Python code
-- [ ] The Docker image includes `data/`
+- [x] The 10 attached cities live in `data/cities.json` with unchanged coordinates
+- [x] Entries may omit coordinates; those are geocoded
+- [x] No city list remains in Python code
+- [x] The Docker image includes `data/`
 
 ## Verify
 ```bash
@@ -27,4 +27,5 @@ grep -q 'COPY --chown=app data' Dockerfile
 ```
 
 ## Evidence
-- _Pending._
+- 2026-11-23 · 79 tests pass, pyright 0 errors; all earlier tasks still verify.
+- Manual: custom catalog with name-only entries resolved live; the Docker image contains data/ (10 cities).
