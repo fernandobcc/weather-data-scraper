@@ -1,7 +1,7 @@
 ---
 id: T10
 title: FastAPI endpoints
-status: todo
+status: in_progress
 requirements: R12
 depends_on: T06, T09
 ---
