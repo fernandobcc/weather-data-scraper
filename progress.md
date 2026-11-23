@@ -48,3 +48,8 @@ Roles are defined in `AGENTS.md`.
 - `api/main.py` (thin adapter over the pipeline) and `api/service.py` (TTL cache + lock). D10.
 - Tests: 61 passed (12 new, including the cache sharing one upstream call across three requests).
 - Live uvicorn: `/health`, `/api/weather`, `/api/rankings`, `/api/charts/temperature.png`, `/api/weather.csv` → 200; unknown city → 404; unknown metric → 404.
+
+## T11: Interactive dashboard (Implementer, Tester)
+- `frontend/` (HTML + Chart.js + CSS with light/dark tokens), served at `/` with static assets. D11.
+- Tests: 64 passed (3 new).
+- Browser (live API): 5 tiles and 10 rows on load; wind + °F/mph switched the title to "Wind speed (mph)"; `Lisbon, Nairobi, Qwxzzyville` showed 2 rows; `Qwxzzyville` alone showed the inline error.
