@@ -30,7 +30,7 @@ def fetch_current_weather(cities: list[dict], session: requests.Session) -> list
     if len(locations) != len(cities):
         raise UpstreamError(f"expected {len(cities)} locations, got {len(locations)}")
     try:
-        return [_to_record(city, loc["current"]) for city, loc in zip(cities, locations)]
+        return [_to_record(city, loc["current"]) for city, loc in zip(cities, locations, strict=True)]
     except (KeyError, TypeError) as exc:
         raise UpstreamError(f"unexpected forecast payload: {exc!r}") from exc
 

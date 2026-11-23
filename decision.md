@@ -85,3 +85,8 @@ the task that made it.
 - **Context:** Names like "Springfield" or "London" exist in many places. The geocoder's top match was taken silently, the CSV gave no hint, and the Cities page couldn't hold two places with the same name. The stakeholder ruled out adding columns.
 - **Decision:** `GET /api/geocode` returns up to 5 matches with region and country. The Cities page lists them, and picking one posts the **exact coordinates** through the existing add endpoint, so no second lookup can choose a different place. When matches share a name, the suggested saved name carries the region (`Springfield (Illinois)`); the user can edit it. Without Find, adding by name still takes the best match (D07 unchanged).
 - **Consequence:** Data contract and storage are unchanged; disambiguation lives in the saved `City` name, so it shows up in the CSV, the table and the charts. One-off dashboard input still takes the best match (no country hint; out of scope).
+
+## D18: Ruff as the lint and import-order gate (T20)
+- **Context:** Stakeholder noticed imports weren't consistently sorted, and no gate checked style.
+- **Decision:** Ruff with pycodestyle, pyflakes, isort, bugbear and pyupgrade rules (`E,F,W,I,B,UP`), line length 120, `output/` excluded (generated). It runs locally and as the first CI step. `ruff format` is deliberately not adopted yet, to avoid a whole-repo reformat.
+- **Consequence:** Unsorted imports, unused imports and similar issues now fail the build; `ruff check --fix` sorts imports automatically. Bugbear already caught a `zip()` without `strict=True`.

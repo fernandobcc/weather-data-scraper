@@ -56,7 +56,7 @@ def filter_range(df: pd.DataFrame, column: str, min_value: float | None = None,
 
 
 def rankings(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
-    """Headline extremes used by the CLI, API and notebook; `row` is the position in `df`. All-null metrics are omitted."""
+    """Headline extremes for the CLI, API and notebook. `row` is the position in `df`; all-null metrics are omitted."""
 
     def pick(column: str, largest: bool) -> dict[str, Any] | None:
         values = df[column].dropna()

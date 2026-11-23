@@ -19,6 +19,7 @@ working in this repo. Read this first, then follow the loop.
 4. Work commit(s): `Tnn: <what changed>`.
 5. Gates, all green:
    ```bash
+   uv run ruff check .          # lint + import order (ruff check --fix sorts imports)
    uv run pytest -q
    uv run pyright
    uv run python scripts/check_tasks.py Tnn

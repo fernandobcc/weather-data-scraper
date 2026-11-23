@@ -14,6 +14,8 @@ jobs:
           fetch-depth: 0  # check_tasks.py reads Tnn: commits from history
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --locked
+      - name: Lint and import order
+        run: uv run ruff check .
       - name: Tests
         run: uv run pytest -q
       - name: Types

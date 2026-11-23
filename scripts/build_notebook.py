@@ -33,7 +33,9 @@ CELLS = [
     new_code_cell('bar_chart(df, "humidity")'),
     new_code_cell('bar_chart(df, "wind")'),
     new_markdown_cell("## 4. Bonus: geocoded cities"),
-    new_code_cell('pipeline.run(["Lisbon", "Buenos Aires", "Nairobi"])[["City", "Latitude", "Longitude", "Temperature (C)"]]'),
+    new_code_cell(
+        'pipeline.run(["Lisbon", "Buenos Aires", "Nairobi"])[["City", "Latitude", "Longitude", "Temperature (C)"]]'
+    ),
 ]
 
 

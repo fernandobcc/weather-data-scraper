@@ -13,7 +13,8 @@ def test_every_task_file_is_valid():
     by_id = {t.id: t for t in tasks}
     committed = check_tasks.committed_task_ids()
     assert tasks, "no task files found"
-    assert {t.id: check_tasks.problems(t, by_id, committed) for t in tasks if check_tasks.problems(t, by_id, committed)} == {}
+    invalid = {t.id: issues for t in tasks if (issues := check_tasks.problems(t, by_id, committed))}
+    assert invalid == {}
 
 
 def test_feature_list_matches_task_status():
@@ -27,7 +28,9 @@ def test_done_task_without_commit_is_rejected(tmp_path):
 
 
 def test_unchecked_done_task_is_rejected(tmp_path):
-    task = check_tasks.Task(id="T99", title="x", status="done", path=tmp_path / "T99-x.md", commands=["true"], unchecked=1)
+    task = check_tasks.Task(
+        id="T99", title="x", status="done", path=tmp_path / "T99-x.md", commands=["true"], unchecked=1
+    )
     assert any("unchecked" in p for p in check_tasks.problems(task, {"T99": task}, committed={"T99"}))
 
 

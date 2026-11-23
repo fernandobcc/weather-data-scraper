@@ -52,8 +52,10 @@ def forecast_handler(params):
 GEO_RESULTS = {
     "lisbon": [{"name": "Lisbon", "admin1": "Lisbon", "country": "Portugal", "latitude": 38.72, "longitude": -9.14}],
     "springfield": [
-        {"name": "Springfield", "admin1": "Missouri", "country": "United States", "latitude": 37.22, "longitude": -93.3},
-        {"name": "Springfield", "admin1": "Illinois", "country": "United States", "latitude": 39.8, "longitude": -89.64},
+        {"name": "Springfield", "admin1": "Missouri", "country": "United States",
+         "latitude": 37.22, "longitude": -93.3},
+        {"name": "Springfield", "admin1": "Illinois", "country": "United States",
+         "latitude": 39.8, "longitude": -89.64},
     ],
 }
 

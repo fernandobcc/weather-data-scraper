@@ -63,4 +63,4 @@ malformed payloads, missing locations) answer `502`.
 - Small single-purpose modules (fetch / geocode / process / plot / export / serve); the CLI, the API and the notebook share one pipeline.
 - Tests never hit the network (HTTP is injected).
 - One HTTP call fetches all cities (Open-Meteo accepts comma-separated coordinates).
-- Gates: `pytest`, `pyright` (0 errors) and `scripts/check_tasks.py`, run in CI on every PR.
+- Gates: `ruff` (lint + import order), `pytest`, `pyright` (0 errors) and `scripts/check_tasks.py`, run in CI on every PR.
