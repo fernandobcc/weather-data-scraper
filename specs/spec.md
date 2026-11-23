@@ -23,6 +23,7 @@ in `feature_list.json` points back to a requirement ID below.
 | R13 | Frontend that plots the data interactively | Stakeholder request |
 | R14 | Jupyter notebook with the analysis, plus generated deliverables, in `output/` | Stakeholder request |
 | R15 | README with run instructions, approach and suggestions; uv, pyright and Docker tooling | Submission + stakeholder request |
+| R16 | Manage the saved city list (list / add / remove) from the frontend, persisted in TinyDB | Stakeholder request (after T16) |
 
 ## Data contract
 
@@ -45,8 +46,12 @@ CSV columns, in order:
 | GET | `/api/rankings?cities=A,B` | Hottest, coldest, most humid, driest, windiest city |
 | GET | `/api/charts/{metric}.png?cities=A,B` | matplotlib PNG; metric ∈ temperature, humidity, wind; unknown metric → `404` |
 | GET | `/api/weather.csv?cities=A,B` | CSV download (`weather_data.csv`) |
+| GET | `/cities` | City management page (HTML) |
+| GET | `/api/cities` | Saved cities |
+| POST | `/api/cities` | Body `{name, latitude?, longitude?}` (both coordinates or neither) → `201` city; `409` duplicate or list full (25); `404` name not found; `422` invalid; `502` geocoder down |
+| DELETE | `/api/cities/{name}` | `204`; `404` if not saved (case-insensitive) |
 
-`cities` is optional; when omitted, the default list is used. Unknown city names are
+`cities` is optional; when omitted, the saved city list is used (seeded from the brief's 10 cities). Unknown city names are
 skipped; if none resolve, the API answers `404`. Upstream failures (HTTP errors,
 malformed payloads, missing locations) answer `502`.
 
