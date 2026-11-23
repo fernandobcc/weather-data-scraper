@@ -1,7 +1,7 @@
 ---
 id: T12
 title: Analysis notebook and generated deliverables
-status: todo
+status: in_progress
 requirements: R14
 depends_on: T09
 ---
