@@ -42,3 +42,8 @@ the task that made it.
 ## D09: One pipeline, thin adapters (T07)
 - **Decision:** `weather.pipeline.run(names, session)` (resolve → fetch → process) is the only composition point. The CLI, the API and the notebook all call it.
 - **Consequence:** No logic is duplicated across adapters, and each adapter stays small and easy to test.
+
+## D10: In-memory TTL cache with a lock in the API (T10)
+- **Context:** One dashboard load hits several endpoints (data, rankings, a chart) for the same cities.
+- **Decision:** Cache pipeline results for 5 min (Open-Meteo "current" data refreshes every 15 min), keyed by the *set* of city names (order and case don't matter), capped at 128 entries. A lock makes concurrent cache misses share one upstream call.
+- **Consequence:** One upstream call per page load. The cache is per-process; use Redis if the API scales out.
