@@ -1,0 +1,144 @@
+{
+  "project": "weather-data-scraper",
+  "spec": "specs/spec.md",
+  "note": "A feature is done exactly when all of its tasks are done (enforced by scripts/check_tasks.py).",
+  "features": [
+    {
+      "id": "F01",
+      "title": "Default city list",
+      "requirements": [
+        "R2"
+      ],
+      "tasks": [
+        "T02"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F02",
+      "title": "Fetch current weather (requests + dotenv config)",
+      "requirements": [
+        "R1",
+        "R10"
+      ],
+      "tasks": [
+        "T03"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F03",
+      "title": "Geocoding for any city name (bonus)",
+      "requirements": [
+        "R3"
+      ],
+      "tasks": [
+        "T04"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F04",
+      "title": "DataFrame with °F and mph",
+      "requirements": [
+        "R4",
+        "R5"
+      ],
+      "tasks": [
+        "T05"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F05",
+      "title": "Ranking and filtering",
+      "requirements": [
+        "R6"
+      ],
+      "tasks": [
+        "T06"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F06",
+      "title": "CSV export",
+      "requirements": [
+        "R7"
+      ],
+      "tasks": [
+        "T07"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F07",
+      "title": "CLI with user input",
+      "requirements": [
+        "R8",
+        "R9"
+      ],
+      "tasks": [
+        "T08"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F08",
+      "title": "matplotlib charts (bonus)",
+      "requirements": [
+        "R11"
+      ],
+      "tasks": [
+        "T09"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F09",
+      "title": "FastAPI endpoints (bonus plus)",
+      "requirements": [
+        "R12"
+      ],
+      "tasks": [
+        "T10"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F10",
+      "title": "Interactive dashboard",
+      "requirements": [
+        "R13"
+      ],
+      "tasks": [
+        "T11"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F11",
+      "title": "Notebook and deliverables in output/",
+      "requirements": [
+        "R14"
+      ],
+      "tasks": [
+        "T12"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "F12",
+      "title": "Tooling and documentation (uv, pyright, CI, Docker, README)",
+      "requirements": [
+        "R15"
+      ],
+      "tasks": [
+        "T01",
+        "T13",
+        "T15"
+      ],
+      "status": "todo"
+    }
+  ]
+}
