@@ -1,7 +1,7 @@
 ---
 id: T04
 title: Geocode city names outside the default list
-status: todo
+status: in_progress
 requirements: R3, R8
 depends_on: T03
 ---
