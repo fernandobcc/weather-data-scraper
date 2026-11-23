@@ -1,7 +1,7 @@
 ---
 id: T19
 title: Pick among same-name cities on the Cities page
-status: todo
+status: in_progress
 requirements: R17
 depends_on: T17, T18
 ---

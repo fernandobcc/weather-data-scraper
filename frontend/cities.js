@@ -51,6 +51,37 @@ async function removeCity(name) {
   }
 }
 
+function matchButton(match, all) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "match";
+  button.textContent = `${match.name} — ${[match.admin1, match.country].filter(Boolean).join(", ")}`;
+  const ambiguous = all.filter((m) => m.name === match.name).length > 1;
+  button.addEventListener("click", () => {
+    $("name").value = ambiguous && match.admin1 ? `${match.name} (${match.admin1})` : match.name;
+    $("lat").value = match.latitude;
+    $("lon").value = match.longitude;
+    $("matches").replaceChildren();
+    showStatus(`Picked ${button.textContent}. Edit the name if you like, then Add.`, "ok");
+  });
+  return button;
+}
+
+async function findMatches() {
+  const name = $("name").value.trim();
+  if (!name) return showStatus("Type a city name first.", "error");
+  try {
+    const matches = await request(`/api/geocode?name=${encodeURIComponent(name)}`);
+    $("matches").replaceChildren(...matches.map((m) => matchButton(m, matches)));
+    if (!matches.length) return showStatus(`No place called ${name}.`, "error");
+    showStatus(matches.length > 1 ? `${matches.length} places match. Pick one.` : "One match. Pick it to fill in the coordinates.", "ok");
+  } catch (err) {
+    showStatus(err.message, "error");
+  }
+}
+
+$("find").addEventListener("click", findMatches);
+
 $("add-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const lat = $("lat").value, lon = $("lon").value;
@@ -68,6 +99,7 @@ $("add-form").addEventListener("submit", async (e) => {
     });
     showStatus(`Added ${city.City} (${city.Latitude}, ${city.Longitude}).`, "ok");
     e.target.reset();
+    $("matches").replaceChildren();
     await loadCities();
   } catch (err) {
     showStatus(err.message, "error");

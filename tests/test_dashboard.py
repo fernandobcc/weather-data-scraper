@@ -36,3 +36,9 @@ def test_cities_page_and_navigation():
 def test_cities_page_builds_rows_without_innerhtml():
     js = client.get("/static/cities.js").text
     assert "textContent" in js and "innerHTML" not in js
+
+
+def test_cities_page_has_match_picker():
+    assert 'id="find"' in client.get("/cities").text
+    js = client.get("/static/cities.js").text
+    assert "/api/geocode?name=" in js and "button.textContent" in js

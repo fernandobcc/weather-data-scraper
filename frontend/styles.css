@@ -72,7 +72,7 @@ th { color: var(--text-secondary); font-weight: 600; }
 .nav a { color: var(--text-secondary); text-decoration: none; padding-bottom: 2px; }
 .nav a[aria-current="page"] { color: var(--text-primary); border-bottom: 2px solid var(--series-1); }
 
-.add-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; align-items: end; }
+.add-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto auto; gap: 8px; align-items: end; }
 .add-form label { display: grid; gap: 4px; font-size: 13px; color: var(--text-secondary); }
 .add-form input {
   padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface-0); color: var(--text-primary); font: inherit;
@@ -85,4 +85,8 @@ th { color: var(--text-secondary); font-weight: 600; }
 #status.error::before { content: "⚠ "; }
 button.danger { padding: 4px 10px; font-size: 13px; }
 button.danger:hover { border-color: var(--critical); color: var(--critical); }
+.matches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.matches:empty { display: none; }
+button.match { font-size: 13px; padding: 6px 10px; }
+button.match:hover { border-color: var(--series-1); }
 @media (max-width: 640px) { .add-form { grid-template-columns: 1fr 1fr; } }

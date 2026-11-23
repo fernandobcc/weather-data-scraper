@@ -15,6 +15,7 @@ from weather.city_store import CityExistsError, CityLimitError, CityNotFoundErro
 from weather.config import CSV_NAME, ROOT
 from weather.errors import UpstreamError
 from weather.export import to_csv_text
+from weather.geocoding import search
 from weather.http import make_session
 from weather.plots import METRICS, bar_chart, to_png_bytes
 from weather.processing import rankings
@@ -89,6 +90,16 @@ class CityIn(BaseModel):
         if (self.latitude is None) != (self.longitude is None):
             raise ValueError("give both latitude and longitude, or neither")
         return self
+
+
+@app.get("/api/geocode")
+def geocode_matches(name: str = Query(min_length=1, max_length=MAX_NAME_LENGTH)) -> list[dict]:
+    """Candidate places for a name, so the Cities page can disambiguate (R17)."""
+    try:
+        return search(name.strip(), make_session())
+    except UpstreamError as exc:
+        log.warning("Upstream failure: %s", exc)
+        raise HTTPException(502, "Geocoding provider error") from exc
 
 
 @app.get("/api/cities")
