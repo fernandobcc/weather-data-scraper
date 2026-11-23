@@ -1,7 +1,7 @@
 ---
 id: T06
 title: Rank and filter cities
-status: todo
+status: in_progress
 requirements: R6
 depends_on: T05
 ---
