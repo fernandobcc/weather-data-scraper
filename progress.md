@@ -113,3 +113,8 @@ A separate agent received only `specs/spec.md`, the AGENTS.md conventions and th
 - `geocoding.search()` (`geocode()` = its first match), `GET /api/geocode`, Find button + match list on the Cities page (rendered with `textContent`).
 - Tests: 108 passed (8 new, including a picked match saved with its exact coordinates and the CSV header unchanged). Pyright 0 errors.
 - Browser (live geocoder, throwaway DB so the user's local list wasn't touched): "Springfield" → 5 matches (MO, IL, MA, OH, TN). Picked Illinois, then Missouri; both saved as `Springfield (Illinois)` / `Springfield (Missouri)` with their own weather (4.6 °C / 6.1 °C); columns unchanged.
+
+## T20: Ruff gate (Implementer, Tester)
+- Stakeholder request: imports not sorted, and add the check to CI. Planner commit first (spec gate line, T20, F12 extended). D18.
+- First run (rules E/F/W/I/B/UP): 15 findings. Import-order and multi-import findings were all in the generated notebook (now excluded as output), plus 11 long lines and one `zip()` without `strict=` (now `strict=True`, backed by the existing count check).
+- `ruff check .` clean; 108 tests, pyright 0 errors. Proved the gate works: a scratch file with unsorted imports failed with I001 (exit 1). CI runs ruff before the tests.

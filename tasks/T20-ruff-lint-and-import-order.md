@@ -1,7 +1,7 @@
 ---
 id: T20
 title: Ruff lint and import order as a CI gate
-status: in_progress
+status: done
 requirements: R15
 depends_on: T01, T19
 ---
@@ -14,10 +14,10 @@ Imports were not consistently sorted and nothing checked style. Add ruff (pycode
 - Out of scope: `ruff format` (a whole-repo reformat); generated files in `output/`.
 
 ## Definition of done
-- [ ] Ruff configured in `pyproject.toml` (line length 120, rules E/F/W/I/B/UP, `output/` excluded)
-- [ ] `ruff check .` reports 0 findings
-- [ ] CI runs ruff before the tests
-- [ ] AGENTS.md and the README list ruff among the gates
+- [x] Ruff configured in `pyproject.toml` (line length 120, rules E/F/W/I/B/UP, `output/` excluded)
+- [x] `ruff check .` reports 0 findings
+- [x] CI runs ruff before the tests
+- [x] AGENTS.md and the README list ruff among the gates
 
 ## Verify
 ```bash
@@ -27,4 +27,4 @@ grep -q 'ruff check' AGENTS.md
 ```
 
 ## Evidence
-- _Pending._
+- 2026-11-23 · `ruff check .` clean; 108 tests, pyright 0 errors; a scratch file with unsorted imports failed with I001 (exit 1).
