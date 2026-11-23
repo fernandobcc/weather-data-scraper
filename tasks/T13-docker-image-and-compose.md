@@ -1,7 +1,7 @@
 ---
 id: T13
 title: Docker image and compose
-status: in_progress
+status: done
 requirements: R15
 depends_on: T11
 ---
@@ -13,9 +13,9 @@ depends_on: T11
 - `Dockerfile`, `docker-compose.yml`, `.dockerignore`
 
 ## Definition of done
-- [ ] The image installs from `uv.lock` with a uv version that matches the lockfile
-- [ ] The image runs uvicorn on :8000 with a healthcheck
-- [ ] `cli` profile writes to `./output`
+- [x] The image installs from `uv.lock` with a uv version that matches the lockfile
+- [x] The image runs uvicorn on :8000 with a healthcheck
+- [x] `cli` profile writes to `./output`
 
 ## Verify
 ```bash
@@ -28,4 +28,4 @@ grep -q '\*\*/__pycache__' .dockerignore
 - `docker build` succeeds; container `/health` and `/api/weather` answer 200.
 
 ## Evidence
-- _Pending._
+- 2026-11-23 · Docker build OK; container smoke test: 4 endpoints → 200; image contents checked.
