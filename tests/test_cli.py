@@ -37,3 +37,13 @@ def test_cli_upstream_error(monkeypatch, tmp_path):
     monkeypatch.setattr(main, "OUTPUT_DIR", tmp_path)
     monkeypatch.setattr(main.pipeline, "run", boom)
     assert main.main([]) == 1
+
+
+def test_cli_writes_charts(cli):
+    assert main.main(["--cities", "Tokyo"]) == 0
+    assert sorted(p.name for p in cli.glob("*.png")) == ["humidity_chart.png", "temperature_chart.png", "wind_chart.png"]
+
+
+def test_cli_no_charts_flag(cli):
+    assert main.main(["--cities", "Tokyo", "--no-charts"]) == 0
+    assert list(cli.glob("*.png")) == []

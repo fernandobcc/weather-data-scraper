@@ -10,6 +10,7 @@ from weather.cities import parse_city_names
 from weather.config import CSV_NAME, OUTPUT_DIR
 from weather.errors import UpstreamError
 from weather.export import to_csv
+from weather.plots import save_all
 from weather.processing import rankings
 
 SORT_COLUMNS = {
@@ -24,6 +25,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--cities", help="Comma-separated city names (default: the 10 attached cities)")
     p.add_argument("--interactive", action="store_true", help="Prompt for city names")
     p.add_argument("--sort-by", choices=SORT_COLUMNS, default="temperature", help="Display order")
+    p.add_argument("--no-charts", action="store_true", help="Skip PNG chart generation")
     return p.parse_args(argv)
 
 
@@ -56,6 +58,9 @@ def main(argv: list[str] | None = None) -> int:
     show(df, args.sort_by)
     csv_path = to_csv(df, OUTPUT_DIR / CSV_NAME)
     print(f"\nSaved {csv_path}")
+    if not args.no_charts:
+        for path in save_all(df, OUTPUT_DIR):
+            print(f"Saved {path}")
     return 0
 
 

@@ -1,7 +1,7 @@
 ---
 id: T09
 title: matplotlib charts
-status: todo
+status: in_progress
 requirements: R11
 depends_on: T08
 ---
