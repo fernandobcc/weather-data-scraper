@@ -1,7 +1,7 @@
 ---
 id: T17
 title: Manage cities from the frontend with TinyDB
-status: in_progress
+status: done
 requirements: R16
 depends_on: T11, T16
 ---
@@ -14,12 +14,12 @@ Users list, add and remove the saved cities from a **Cities** page, and the list
 - Out of scope: auth / multi-user lists.
 
 ## Definition of done
-- [ ] `GET`/`POST /api/cities` and `DELETE /api/cities/{name}` follow the API contract (201/204/404/409/422/502)
-- [ ] The store is seeded once from `data/cities.json`; added names are geocoded once and stored with coordinates
-- [ ] Names are unique (case-insensitive); the list is capped at 25 cities
-- [ ] Default runs use the saved list; every change clears the API cache
-- [ ] Tests use a temporary store and never touch `db/`
-- [ ] Saved cities survive a container restart (compose volume, writable by the non-root user)
+- [x] `GET`/`POST /api/cities` and `DELETE /api/cities/{name}` follow the API contract (201/204/404/409/422/502)
+- [x] The store is seeded once from `data/cities.json`; added names are geocoded once and stored with coordinates
+- [x] Names are unique (case-insensitive); the list is capped at 25 cities
+- [x] Default runs use the saved list; every change clears the API cache
+- [x] Tests use a temporary store and never touch `db/`
+- [x] Saved cities survive a container restart (compose volume, writable by the non-root user)
 
 ## Verify
 ```bash
@@ -32,4 +32,5 @@ grep -q 'city-db:/app/db' docker-compose.yml && grep -q 'mkdir -p /app/db' Docke
 - Browser + Docker: add a city by name, reject a duplicate, restart the container, remove the city.
 
 ## Evidence
-- _Pending._
+- 2026-11-23 · 99 tests pass, pyright 0 errors; all earlier tasks still verify.
+- Manual (Docker compose + browser): add by name, duplicate rejected, restart persistence, remove all behaved as specified; the volume is writable by the non-root user.

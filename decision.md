@@ -74,3 +74,9 @@ the task that made it.
 - **Context:** Reviewer finding #11: the default cities were a Python dict, so changing them meant finding and editing code.
 - **Decision:** `data/cities.json` holds the list (path set by `CITIES_FILE`). Each entry needs `City`; `Latitude`/`Longitude` are optional and missing ones are geocoded. `resolve_cities` treats the list and user-typed names the same way.
 - **Consequence:** Adding a default city is a one-line JSON edit. The brief's coordinates are still used as given, so a default run makes no geocoding calls.
+
+## D16: TinyDB store for the saved city list (T17)
+- **Context:** Stakeholder request (R16): add and remove cities from the frontend, which needs a writable store. `data/cities.json` (D15) stays read-only.
+- **Decision:** `weather/city_store.py` wraps TinyDB at `db/cities.json` (gitignored; `city-db` volume in Docker, created writable for the non-root user). It is seeded once from `data/cities.json`. Added names are geocoded **once, when added**, and stored with coordinates. Names are unique case-insensitively, and the list is capped at 25, matching D14's input limit. A lock serialises access because TinyDB is not thread-safe. Every change clears the API cache.
+- **Why TinyDB:** a pure-Python JSON document store with no server and a readable file, which fits a list of tens of rows. SQLite is the next step if several processes need to write.
+- **Consequence:** The saved list is runtime state and `data/cities.json` is the factory default (delete `db/cities.json` to reset). Tests use a temporary store via an autouse fixture and never touch `db/`.

@@ -91,3 +91,9 @@ A separate agent received only `specs/spec.md`, the AGENTS.md conventions and th
 ## T16: Default city list as a data file (Implementer)
 - `data/cities.json` (the brief's 10 cities, unchanged), `load_cities()`, `CITIES_FILE`; `resolve_cities` takes the catalog; the Dockerfile copies `data/`. Closes review finding #11. D15.
 - Tests: 79 passed. Live: a catalog with Tokyo (coordinates) plus Lisbon and Nairobi (name only) resolved all three. The image loads 10 cities.
+
+## T17: Manage cities from the frontend (Planner, Implementer, Tester)
+- Planner commit first: R16, API-contract rows, feature F13 and this task (the scope change goes through the spec).
+- `weather/city_store.py` (TinyDB), `GET/POST /api/cities`, `DELETE /api/cities/{name}`, Cities page + nav, compose volume. `resolve_cities` now takes the catalog explicitly; the pipeline passes the saved list. D16.
+- Tests: 99 passed (20 new: store, API contract codes 201/204/404/409/422/502, page). Pyright 0 errors.
+- Docker compose + browser: Lisbon added by name (201) and persisted across `restart`; `paris` and `TOKYO` → 409; half-filled coordinates rejected in the form; Nairobi geocoded and added; Lisbon removed (204). Volume writable as `app`.
