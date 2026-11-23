@@ -101,3 +101,8 @@ A separate agent received only `specs/spec.md`, the AGENTS.md conventions and th
 ## T15: README (Implementer)
 - Done last on purpose (it depends only on T14), so it describes the finished project: quick start (uv and Docker), outputs, CSV and API guide, managing cities, layout, the approach (spec-driven, task harness, multi-agent roles, independent review) and suggestions (Scrapy vs requests, async, history, Redis/SQLite, Playwright).
 - Final state: 18 tasks done (T00–T17), 13 features done, 99 tests, pyright 0 errors, 16 decisions. Every task merged through its own PR with CI green.
+
+## T18: Valid YAML front matter (Implementer, Tester)
+- Reported by the stakeholder: GitHub showed "Error in user YAML: mapping values are not allowed" on T15. Cause: unquoted `:` in the T01 and T15 titles. The checker's hand-rolled parser accepted it, so the harness had a blind spot.
+- Test first: `test_front_matter_is_valid_yaml` parses every task header with PyYAML; it failed with GitHub's exact error before the fix. Titles quoted, the checker strips quotes, and the rule is in `tasks/README.md`.
+- 100 tests pass, pyright 0 errors. GitHub (branch preview): T01 and T15 headers render as tables with no error.
