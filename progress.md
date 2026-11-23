@@ -87,3 +87,7 @@ A separate agent received only `specs/spec.md`, the AGENTS.md conventions and th
 - 77 tests pass, pyright 0 errors. The harness caught one slip of mine: attaching T16 to F01 left F01 marked `done`; reopened as `in_progress`.
 - Regenerated `output/` with the new code (live run 20:15 UTC). The notebook still has 3 chart images without pyplot.
 - Docker: rebuilt; runs as `app`; endpoints 200; 26 names → 422. Browser: SRI-pinned Chart.js loads; tiles and bars correct (Mumbai 27.1 °C).
+
+## T16: Default city list as a data file (Implementer)
+- `data/cities.json` (the brief's 10 cities, unchanged), `load_cities()`, `CITIES_FILE`; `resolve_cities` takes the catalog; the Dockerfile copies `data/`. Closes review finding #11. D15.
+- Tests: 79 passed. Live: a catalog with Tokyo (coordinates) plus Lisbon and Nairobi (name only) resolved all three. The image loads 10 cities.

@@ -1,9 +1,11 @@
 import pytest
 
 from tests.conftest import FakeResponse, FakeSession
-from weather.cities import DEFAULT_CITIES
+from weather.cities import load_cities
 from weather.client import fetch_current_weather
 from weather.errors import UpstreamError
+
+DEFAULT_CITIES = load_cities()
 
 
 def test_fetches_all_cities_in_one_call(fake_session):

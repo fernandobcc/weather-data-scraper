@@ -2,14 +2,26 @@ import pytest
 import requests
 
 from tests.conftest import FakeResponse, FakeSession
-from weather.cities import DEFAULT_CITIES
+from weather.cities import load_cities
 from weather.errors import UpstreamError
 from weather.geocoding import resolve_cities
 
 
 def test_resolve_defaults_when_no_names(fake_session):
-    assert resolve_cities([], fake_session) == DEFAULT_CITIES
+    assert resolve_cities([], fake_session) == load_cities()
     assert fake_session.calls == []
+
+
+@pytest.mark.parametrize("name", ["tokyo", "  TOKYO ", "Tokyo"])
+def test_catalog_lookup_is_case_insensitive(fake_session, name):
+    assert resolve_cities([name], fake_session) == [{"City": "Tokyo", "Latitude": 35.6895, "Longitude": 139.6917}]
+    assert fake_session.calls == []
+
+
+def test_catalog_entry_without_coordinates_is_geocoded(fake_session):
+    catalog = [{"City": "Tokyo", "Latitude": 35.6895, "Longitude": 139.6917}, {"City": "Lisbon"}]
+    cities = resolve_cities([], fake_session, catalog)
+    assert [c["City"] for c in cities] == ["Tokyo", "Lisbon"] and cities[1]["Latitude"] == 38.72
 
 
 def test_resolve_known_unknown_and_geocoded(fake_session):
