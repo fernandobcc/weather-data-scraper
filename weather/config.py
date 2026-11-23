@@ -9,3 +9,5 @@ load_dotenv(ROOT / ".env")
 FORECAST_URL = os.getenv("OPEN_METEO_FORECAST_URL", "https://api.open-meteo.com/v1/forecast")
 GEOCODING_URL = os.getenv("OPEN_METEO_GEOCODING_URL", "https://geocoding-api.open-meteo.com/v1/search")
 HTTP_TIMEOUT = float(os.getenv("HTTP_TIMEOUT", "10"))
+OUTPUT_DIR = ROOT / os.getenv("OUTPUT_DIR", "output")
+CSV_NAME = "weather_data.csv"

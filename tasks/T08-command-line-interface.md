@@ -1,7 +1,7 @@
 ---
 id: T08
 title: Command-line interface
-status: todo
+status: in_progress
 requirements: R8, R9
 depends_on: T06, T07
 ---
