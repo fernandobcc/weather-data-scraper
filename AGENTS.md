@@ -47,7 +47,7 @@ gets the spec and the code, **not** the implementer's conclusions.
 - HTTP sessions are injected (`session` parameter); tests use `tests/conftest.py::FakeSession` and never touch the network.
 - The output column order is defined once, in `weather/processing.py::COLUMNS`.
 - Data belongs in data files, not in Python modules.
-- Short comments; clear names; one-line docstrings. Type hints everywhere; pyright stays at 0 errors.
+- Short comments; clear names; a one-line docstring where the name isn't enough. Type hints on every signature; pyright stays at 0 errors.
 
 ## Commands
 

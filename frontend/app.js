@@ -14,6 +14,7 @@ const TILES = [
 const state = { rows: [], rankings: {}, metric: "temperature", cities: "" };
 const $ = (id) => document.getElementById(id);
 const esc = (v) => String(v).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+const show = (v) => (v === null || v === undefined ? "–" : esc(v));
 const css = (name) => getComputedStyle(document.body).getPropertyValue(name).trim();
 let chart;
 
@@ -49,12 +50,11 @@ function render() {
 }
 
 function renderTiles() {
-  const byCity = Object.fromEntries(state.rows.map((r) => [r.City, r]));
-  $("tiles").innerHTML = TILES.map(([key, label, metric]) => {
-    const city = state.rankings[key].city;
+  $("tiles").innerHTML = TILES.filter(([key]) => state.rankings[key]).map(([key, label, metric]) => {
+    const row = state.rows[state.rankings[key].row];
     const [column, unit] = field(metric);
     return `<div class="tile"><div class="label">${label}</div>
-      <div class="value">${byCity[city][column]} ${unit}</div><div class="city">${esc(city)}</div></div>`;
+      <div class="value">${show(row[column])} ${unit}</div><div class="city">${esc(row.City)}</div></div>`;
   }).join("");
 }
 
@@ -93,7 +93,7 @@ function renderChart() {
 function renderTable() {
   const head = `<tr>${TABLE_COLUMNS.map((c) => `<th>${c}</th>`).join("")}</tr>`;
   const body = state.rows
-    .map((r) => `<tr>${TABLE_COLUMNS.map((c) => `<td>${esc(r[c])}</td>`).join("")}</tr>`)
+    .map((r) => `<tr>${TABLE_COLUMNS.map((c) => `<td>${show(r[c])}</td>`).join("")}</tr>`)
     .join("");
   $("table").innerHTML = head + body;
 }

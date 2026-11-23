@@ -48,6 +48,9 @@ def main(argv: list[str] | None = None) -> int:
     raw = ask_cities() if args.interactive else args.cities
     try:
         df = pipeline.run(parse_city_names(raw))
+    except ValueError as exc:
+        logging.error("Invalid cities: %s", exc)
+        return 2
     except UpstreamError as exc:
         logging.error("Weather API request failed: %s", exc)
         return 1

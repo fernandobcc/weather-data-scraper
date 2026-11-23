@@ -61,3 +61,29 @@ Roles are defined in `AGENTS.md`.
 ## T13: Docker (Implementer, Tester)
 - `Dockerfile`, `docker-compose.yml` (API + `cli` profile), `.dockerignore`. D13.
 - Built locally; container `/health`, `/api/weather?cities=Lisbon`, `/` and `/api/charts/wind.png` → 200. The image contains only `api`, `frontend`, `weather`, `main.py` and the lock files.
+
+## T14: Independent review and hardening (Reviewer, Implementer)
+
+### Reviewer
+A separate agent received only `specs/spec.md`, the AGENTS.md conventions and the code (not task notes or this log). It ran the gates and throwaway edge-case scripts and reported 12 findings:
+
+| # | Finding | Resolution |
+|---|---------|------------|
+| 1 | `rankings()` crashes when a metric is all null → `/api/rankings` 500 | Fixed: all-null metrics are omitted |
+| 2 | Geocoder outage silently skipped → 404 (spec: 502), and a degraded result was cached | Fixed: `UpstreamError` → 502, not cached (D14) |
+| 3 | Non-dict geocoding JSON or non-numeric forecast values → 500 | Fixed: validated, `UpstreamError` → 502 |
+| 4 | Unbounded `cities` (2000 names = 2000 geocoding calls) | Fixed: max 25 names × 100 chars → 422 / CLI exit 2 |
+| 5 | Global lock held during network I/O serialises the whole API | Fixed: one lock per city set |
+| 6 | pyplot global state in threaded API handlers | Fixed: `Figure()` without pyplot |
+| 7 | CDN script without SRI | Fixed: sha384 `integrity` + `crossorigin` |
+| 8 | Tiles looked up rows by name only; null shown as "null" | Fixed: `rankings` returns `row`; nulls shown as "–" |
+| 9 | 502 detail leaked the upstream URL | Fixed: generic detail, logged server-side |
+| 10 | Container runs as root | Fixed: `USER app` (uid 1000) |
+| 11 | City data in Python; missing type hints and docstrings | Type hints added. City data → new task **T16**. Docstring rule clarified in AGENTS.md (one line where the name isn't enough) |
+| 12 | Missing regression tests for the above | Fixed: 13 new tests |
+| — | Notebook ignored `OUTPUT_DIR`; httpx2 deprecation warning | Notebook fixed. Warning accepted (it comes from FastAPI's test client) |
+
+### Implementer
+- 77 tests pass, pyright 0 errors. The harness caught one slip of mine: attaching T16 to F01 left F01 marked `done`; reopened as `in_progress`.
+- Regenerated `output/` with the new code (live run 20:15 UTC). The notebook still has 3 chart images without pyplot.
+- Docker: rebuilt; runs as `app`; endpoints 200; 26 names → 422. Browser: SRI-pinned Chart.js loads; tiles and bars correct (Mumbai 27.1 °C).

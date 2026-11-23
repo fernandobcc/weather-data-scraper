@@ -24,3 +24,11 @@ def test_unknown_city_is_none():
 ])
 def test_parse_city_names(raw, expected):
     assert parse_city_names(raw) == expected
+
+
+def test_parse_city_names_limits():
+    assert len(parse_city_names(",".join(["Paris"] * 25))) == 25
+    with pytest.raises(ValueError):
+        parse_city_names(",".join(["Paris"] * 26))
+    with pytest.raises(ValueError):
+        parse_city_names("x" * 101)

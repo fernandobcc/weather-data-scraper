@@ -20,3 +20,11 @@ def test_rankings():
 
 def test_rankings_empty():
     assert rankings(build_dataframe([])) == {}
+
+
+def test_rankings_skip_all_null_metric_and_report_row():
+    records = [dict(r, **{"Humidity (%)": None}) for r in RECORDS]
+    df = build_dataframe(records)
+    r = rankings(df)
+    assert "most_humid" not in r and "driest" not in r
+    assert df.iloc[r["hottest"]["row"]]["City"] == r["hottest"]["city"] == "Tokyo"

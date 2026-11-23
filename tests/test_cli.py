@@ -47,3 +47,7 @@ def test_cli_writes_charts(cli):
 def test_cli_no_charts_flag(cli):
     assert main.main(["--cities", "Tokyo", "--no-charts"]) == 0
     assert list(cli.glob("*.png")) == []
+
+
+def test_cli_rejects_too_many_cities(cli):
+    assert main.main(["--cities", ",".join(["Paris"] * 26)]) == 2
