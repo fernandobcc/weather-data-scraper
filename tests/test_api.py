@@ -73,3 +73,58 @@ def test_cache_is_shared_per_city_set(fake_session, monkeypatch):
     client.get("/api/rankings", params={"cities": "tokyo, paris"})
     client.get("/api/charts/wind.png", params={"cities": "Tokyo,Paris"})
     assert len(calls) == 1
+
+
+def test_upstream_error_detail_is_generic(monkeypatch):
+    service.clear_cache()
+
+    def boom(names):
+        raise UpstreamError("https://internal.example/v1?secret=1 failed")
+
+    monkeypatch.setattr(service.pipeline, "run", boom)
+    assert TestClient(app).get("/api/weather").json() == {"detail": "Weather provider error"}
+
+
+def test_geocoder_outage_is_502_and_not_cached(fake_session, monkeypatch):
+    import requests
+
+    from tests.conftest import FakeSession, forecast_handler
+
+    service.clear_cache()
+
+    def down(params):
+        raise requests.ConnectionError("down")
+
+    sessions = [FakeSession({"forecast": forecast_handler, "geocoding": down}), fake_session]
+    monkeypatch.setattr(service.pipeline, "run", lambda names: real_run(names, sessions[0]))
+    client = TestClient(app)
+    assert client.get("/api/weather", params={"cities": "Lisbon"}).status_code == 502
+    sessions.pop(0)
+    assert client.get("/api/weather", params={"cities": "Lisbon"}).json()[0]["City"] == "Lisbon"
+
+
+@pytest.mark.parametrize("cities", [",".join(["Paris"] * 26), "x" * 101])
+def test_oversized_input_is_422(client, cities):
+    assert client.get("/api/weather", params={"cities": cities}).status_code == 422
+
+
+def test_slow_city_set_does_not_block_others(fake_session, monkeypatch):
+    import threading
+
+    service.clear_cache()
+    release = threading.Event()
+
+    def run(names):
+        if names == ["Tokyo"]:
+            release.wait(5)
+        return real_run(names, fake_session)
+
+    monkeypatch.setattr(service.pipeline, "run", run)
+    slow = threading.Thread(target=service.get_weather, args=("Tokyo",))
+    slow.start()
+    try:
+        assert list(service.get_weather("Paris")["City"]) == ["Paris"]  # returns while Tokyo is still in flight
+        assert slow.is_alive()
+    finally:
+        release.set()
+        slow.join()

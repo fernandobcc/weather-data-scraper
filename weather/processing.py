@@ -56,19 +56,22 @@ def filter_range(df: pd.DataFrame, column: str, min_value: float | None = None,
 
 
 def rankings(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
-    """Headline extremes used by the CLI, API and notebook."""
-    if df.empty:
-        return {}
+    """Headline extremes used by the CLI, API and notebook; `row` is the position in `df`. All-null metrics are omitted."""
 
-    def pick(column: str, largest: bool) -> dict[str, Any]:
-        row = df.loc[df[column].idxmax() if largest else df[column].idxmin()]
-        value = row[column]
-        return {"city": row["City"], "value": getattr(value, "item", lambda: value)(), "metric": column}
+    def pick(column: str, largest: bool) -> dict[str, Any] | None:
+        values = df[column].dropna()
+        if values.empty:
+            return None
+        label = values.idxmax() if largest else values.idxmin()
+        value = values[label]
+        return {"city": df.loc[label, "City"], "value": getattr(value, "item", lambda: value)(),
+                "metric": column, "row": int(df.index.get_indexer([label])[0])}
 
-    return {
+    picks = {
         "hottest": pick("Temperature (C)", True),
         "coldest": pick("Temperature (C)", False),
         "most_humid": pick("Humidity (%)", True),
         "driest": pick("Humidity (%)", False),
         "windiest": pick("Wind Speed (m/s)", True),
     }
+    return {key: item for key, item in picks.items() if item is not None}

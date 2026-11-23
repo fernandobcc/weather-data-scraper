@@ -18,7 +18,15 @@ def known_city(name: str) -> dict | None:
     return _BY_NAME.get(name.strip().casefold())
 
 
+MAX_CITIES = 25
+MAX_NAME_LENGTH = 100
+
+
 def parse_city_names(raw: str | None) -> list[str]:
-    if not raw:
-        return []
-    return [n.strip() for n in raw.split(",") if n.strip()]
+    """Split comma-separated input; ValueError past MAX_CITIES names or MAX_NAME_LENGTH characters."""
+    names = [n.strip() for n in (raw or "").split(",") if n.strip()]
+    if len(names) > MAX_CITIES:
+        raise ValueError(f"at most {MAX_CITIES} cities per request")
+    if any(len(n) > MAX_NAME_LENGTH for n in names):
+        raise ValueError(f"city names are limited to {MAX_NAME_LENGTH} characters")
+    return names

@@ -40,8 +40,15 @@ def _to_record(city: dict, current: dict) -> dict:
         "City": city["City"],
         "Latitude": city["Latitude"],
         "Longitude": city["Longitude"],
-        "Temperature (C)": current["temperature_2m"],
-        "Humidity (%)": current["relative_humidity_2m"],
-        "Wind Speed (m/s)": current["wind_speed_10m"],
-        "Observed At (UTC)": current["time"],
+        "Temperature (C)": _number(current["temperature_2m"]),
+        "Humidity (%)": _number(current["relative_humidity_2m"]),
+        "Wind Speed (m/s)": _number(current["wind_speed_10m"]),
+        "Observed At (UTC)": str(current["time"]),
     }
+
+
+def _number(value: object) -> float | None:
+    """Open-Meteo sends numbers or null; anything else is a malformed payload."""
+    if value is None or (isinstance(value, (int, float)) and not isinstance(value, bool)):
+        return value
+    raise TypeError(f"expected a number or null, got {value!r}")

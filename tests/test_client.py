@@ -25,7 +25,11 @@ def test_empty_city_list_skips_http(fake_session):
     assert fake_session.calls == []
 
 
-@pytest.mark.parametrize("payload", [[{"current": {}}], {"error": True, "reason": "bad"}])
+@pytest.mark.parametrize("payload", [
+    [{"current": {}}],
+    {"error": True, "reason": "bad"},
+    {"current": {"time": "t", "temperature_2m": "hot", "relative_humidity_2m": 1, "wind_speed_10m": 1}},
+])
 def test_malformed_payload_raises_upstream_error(payload):
     session = FakeSession({"forecast": lambda p: FakeResponse(payload)})
     with pytest.raises(UpstreamError):

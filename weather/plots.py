@@ -1,12 +1,8 @@
 import io
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import pandas as pd  # noqa: E402
-from matplotlib.figure import Figure  # noqa: E402
+import pandas as pd
+from matplotlib.figure import Figure
 
 BAR_COLOR = "#2a78d6"
 INK = "#52514e"
@@ -22,7 +18,8 @@ def bar_chart(df: pd.DataFrame, metric: str) -> Figure:
     """Horizontal bar chart, largest value on top, values labelled at bar ends."""
     column, title, fmt = METRICS[metric]
     data = df.sort_values(column)
-    fig, ax = plt.subplots(figsize=(8, 0.45 * len(data) + 1.2))
+    fig = Figure(figsize=(8, 0.45 * len(data) + 1.2))  # no pyplot: thread-safe in the API
+    ax = fig.subplots()
     bars = ax.barh(data["City"], data[column], color=BAR_COLOR, height=0.6)
     ax.bar_label(bars, fmt=fmt, padding=4, color=INK, fontsize=9)
     ax.set_title(title, loc="left", fontsize=12, color="#0b0b0b")
@@ -39,7 +36,6 @@ def bar_chart(df: pd.DataFrame, metric: str) -> Figure:
 def to_png_bytes(fig: Figure) -> bytes:
     buf = io.BytesIO()
     fig.savefig(buf, format="png", dpi=120)
-    plt.close(fig)
     return buf.getvalue()
 
 

@@ -18,5 +18,10 @@ def test_static_assets_are_served():
 
 def test_dashboard_escapes_and_reports_errors():
     js = client.get("/static/app.js").text
-    assert "const esc" in js and "esc(r[c])" in js
+    assert "const esc" in js and "show(r[c])" in js and "esc(row.City)" in js
     assert ".catch(() => ({}))" in js
+
+
+def test_cdn_script_has_subresource_integrity():
+    html = client.get("/").text
+    assert 'integrity="sha384-' in html and 'crossorigin="anonymous"' in html
