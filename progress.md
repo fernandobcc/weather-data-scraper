@@ -34,3 +34,7 @@ Roles are defined in `AGENTS.md`.
 ## T07: Pipeline and CSV export (Implementer)
 - `weather/pipeline.py` (resolve → fetch → process) and `weather/export.py`. D09.
 - Tests: 38 passed (3 new); the CSV header equals the data contract, there is no index column, and an end-to-end run makes 3 HTTP calls (2 geocodes + 1 forecast).
+
+## T08: Command-line interface (Implementer)
+- `main.py`: `--cities`, `--interactive`, `--sort-by`; prints the table and highlights; writes `output/weather_data.csv`; exits 1 when nothing resolves or on `UpstreamError`. `OUTPUT_DIR` configurable.
+- Tests: 42 passed (4 new). Live: `--cities "Lisbon, Tokyo, Nairobi"` printed the table and highlights (hottest Nairobi 17.0 °C) and wrote the CSV.
