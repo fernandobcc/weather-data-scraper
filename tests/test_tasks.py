@@ -29,3 +29,20 @@ def test_done_task_without_commit_is_rejected(tmp_path):
 def test_unchecked_done_task_is_rejected(tmp_path):
     task = check_tasks.Task(id="T99", title="x", status="done", path=tmp_path / "T99-x.md", commands=["true"], unchecked=1)
     assert any("unchecked" in p for p in check_tasks.problems(task, {"T99": task}, committed={"T99"}))
+
+
+def test_front_matter_is_valid_yaml():
+    """GitHub renders the header as YAML; an unquoted ':' in a value breaks it."""
+    import re
+
+    import yaml
+
+    for path in sorted(check_tasks.TASKS_DIR.glob("*.md")):
+        header = re.match(r"---\n(.*?)\n---\n", path.read_text(encoding="utf-8"), re.S)
+        if path.name == "README.md":
+            continue
+        assert header, f"{path.name}: missing front matter"
+        meta = yaml.safe_load(header.group(1))
+        assert isinstance(meta, dict), path.name
+        parsed = check_tasks.parse(path)
+        assert str(meta["title"]) == parsed.title, f"{path.name}: checker and YAML disagree on the title"

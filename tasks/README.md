@@ -33,6 +33,7 @@ python scripts/check_tasks.py            # re-verify every done task (regression
 - **Verify commands are deterministic and offline** (pytest node ids, pyright, file and content checks). Anything that needs the network, a browser or Docker goes under *Manual checks*.
 - Definition-of-done items are observable outcomes ("CSV header matches the spec"), not activities.
 - One feature per task; split it if the Verify block grows past ~6 commands.
+- The header is YAML (GitHub renders it): quote any value that contains `:`, e.g. `title: "README: run guide"`.
 - New work that isn't in the spec: update the spec first (new `R`), then add the task.
 
 Start from [`_template.md`](_template.md).

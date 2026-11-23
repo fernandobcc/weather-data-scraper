@@ -39,7 +39,7 @@ def parse(path: Path) -> Task:
     text = path.read_text(encoding="utf-8")
     header = re.match(r"---\n(.*?)\n---\n", text, re.S)
     pairs = [line.split(":", 1) for line in header.group(1).splitlines()] if header else []
-    meta = {k.strip(): v.strip() for k, v in pairs}
+    meta = {k.strip(): v.strip().strip('"') for k, v in pairs}  # values may be quoted (YAML)
     verify = re.search(r"## Verify\s*```(?:bash|sh)?\n(.*?)```", text, re.S)
     dod = text.split("## Definition of done", 1)[-1].split("\n## ", 1)[0]
     return Task(

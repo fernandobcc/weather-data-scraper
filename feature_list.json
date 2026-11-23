@@ -137,9 +137,10 @@
       "tasks": [
         "T01",
         "T13",
-        "T15"
+        "T15",
+        "T18"
       ],
-      "status": "done"
+      "status": "in_progress"
     },
     {
       "id": "F13",
