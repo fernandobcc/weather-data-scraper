@@ -4,14 +4,17 @@ version = "1.0.0"
 description = "Open-Meteo weather scraping, pandas processing, CSV export, charts and a FastAPI dashboard"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi>=0.165.0",
     "matplotlib>=3.11.2",
     "pandas>=3.1.1",
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
+    "uvicorn>=0.54.0",
 ]
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "pyright[nodejs]>=1.1.414",
     "pytest>=9.2.0",
 ]

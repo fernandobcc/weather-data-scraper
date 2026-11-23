@@ -43,3 +43,8 @@ Roles are defined in `AGENTS.md`.
 - `weather/plots.py`: horizontal bar charts for temperature, humidity and wind (Agg backend, sorted, values labelled); `main.py` saves them unless `--no-charts`.
 - Manual check found humidity labelled `94.0`; fixed with a per-metric label format and a regression test.
 - Tests: 49 passed (7 new).
+
+## T10: FastAPI endpoints (Implementer, Tester)
+- `api/main.py` (thin adapter over the pipeline) and `api/service.py` (TTL cache + lock). D10.
+- Tests: 61 passed (12 new, including the cache sharing one upstream call across three requests).
+- Live uvicorn: `/health`, `/api/weather`, `/api/rankings`, `/api/charts/temperature.png`, `/api/weather.csv` → 200; unknown city → 404; unknown metric → 404.
