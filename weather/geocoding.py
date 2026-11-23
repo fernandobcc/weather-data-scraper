@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-from weather.cities import DEFAULT_CITIES, known_city
+from weather.cities import has_coordinates, load_cities
 from weather.config import GEOCODING_URL, HTTP_TIMEOUT
 from weather.errors import UpstreamError
 
@@ -23,13 +23,14 @@ def geocode(name: str, session: requests.Session) -> dict | None:
         raise UpstreamError(f"geocoding failed for {name!r}: {exc}") from exc
 
 
-def resolve_cities(names: list[str], session: requests.Session) -> list[dict]:
-    """Known cities come from the attached dict; anything else is geocoded. Unknown names are skipped, duplicates dropped."""
-    if not names:
-        return list(DEFAULT_CITIES)
+def resolve_cities(names: list[str], session: requests.Session, catalog: list[dict] | None = None) -> list[dict]:
+    """Names default to the catalog; catalog coordinates win, anything else is geocoded.
+    Unknown names are skipped, duplicates dropped."""
+    catalog = load_cities() if catalog is None else catalog
+    known = {c["City"].casefold(): c for c in catalog if has_coordinates(c)}
     resolved: dict[tuple, dict] = {}
-    for name in names:
-        city = known_city(name) or geocode(name, session)
+    for name in names or [c["City"] for c in catalog]:
+        city = known.get(name.strip().casefold()) or geocode(name, session)
         if city is None:
             log.warning("Could not resolve city %r, skipping", name)
             continue

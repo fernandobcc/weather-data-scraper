@@ -1,7 +1,7 @@
 ---
 id: T16
 title: Default city list as a data file
-status: todo
+status: in_progress
 requirements: R2
 depends_on: T14
 ---

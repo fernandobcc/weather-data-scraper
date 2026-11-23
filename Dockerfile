@@ -13,6 +13,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY --chown=app weather ./weather
 COPY --chown=app api ./api
 COPY --chown=app frontend ./frontend
+COPY --chown=app data ./data
 COPY --chown=app main.py ./
 
 EXPOSE 8000

@@ -1,22 +1,26 @@
+import json
+
 import pytest
 
-from weather.cities import DEFAULT_CITIES, known_city, parse_city_names
+from weather.cities import has_coordinates, load_cities, parse_city_names
 
 
 def test_default_list_has_attached_ten_cities():
-    assert len(DEFAULT_CITIES) == 10
-    assert DEFAULT_CITIES[0] == {"City": "New York", "Latitude": 40.7128, "Longitude": -74.0060}
-    assert DEFAULT_CITIES[-1]["City"] == "Rio de Janeiro"
+    cities = load_cities()
+    assert len(cities) == 10
+    assert cities[0] == {"City": "New York", "Latitude": 40.7128, "Longitude": -74.006}
+    assert cities[-1]["City"] == "Rio de Janeiro"
 
 
-@pytest.mark.parametrize("name", ["tokyo", "  TOKYO ", "Tokyo"])
-def test_known_city_is_case_insensitive(name):
-    city = known_city(name)
-    assert city is not None and city["City"] == "Tokyo"
+def test_load_cities_from_another_file(tmp_path):
+    path = tmp_path / "cities.json"
+    path.write_text(json.dumps([{"City": "Lisbon"}]))
+    assert load_cities(path) == [{"City": "Lisbon"}]
 
 
-def test_unknown_city_is_none():
-    assert known_city("Lisbon") is None
+def test_has_coordinates():
+    assert has_coordinates({"City": "A", "Latitude": 0.0, "Longitude": 0.0})
+    assert not has_coordinates({"City": "A"})
 
 
 @pytest.mark.parametrize("raw, expected", [
